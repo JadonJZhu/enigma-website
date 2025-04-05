@@ -42,6 +42,11 @@
     transition: background-color 0.3s, transform 0.2s;
 }
 
+.book-image img {
+    max-width: 70%;
+    height: auto;
+}
+
 /* Book Grid Styles */
 .book-grid {
     display: grid;
@@ -53,15 +58,22 @@
 .book-card {
     text-align: center;
 }
-
 .book-card img {
     max-width: 100%;
     height: auto;
+}
+
+/* Hero Section Styles */
+.hero-section {
+    padding: 80px 30 0 0;
+    /* Remove bottom padding */
+    /* Other styles remain the same */
 }
 
 /* Previous Reads Section */
 .previous-reads {
     background-color: white;
     width: 100%;
-    padding: 0px 15px 15px 15px;
+    padding: 5px 15px 15px 15px;
+    /* Increase top padding */
 }

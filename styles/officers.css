@@ -1,0 +1,47 @@
+.officer-card {
+    display: flex;
+    align-items: center;
+    max-width: 800px;
+    /* Limit the overall card width */
+    margin: 0 auto;
+    /* Center the card if desired */
+}
+
+.officer-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    margin-left: 20px;
+    max-width: 70%;
+    /* Control how wide the text section can get */
+}
+
+/* Decrease spacing between headers */
+.officer-info h3 {
+    margin-bottom: 2px;
+    /* Reduce space after the name */
+}
+
+.officer-info h4 {
+    margin-top: 0;
+    /* Remove space above the title */
+    margin-bottom: 8px;
+    /* Add a small space after the title */
+}
+
+/* Control text wrapping */
+.officer-info .about-text {
+    margin-top: 0;
+    line-height: 1.4;
+    /* Improves readability */
+    word-wrap: break-word;
+    /* Ensures words break appropriately */
+    overflow-wrap: break-word;
+    padding-right: 5px;
+}
+
+.officer-image {
+    width: 70%;
+    height: auto;
+}

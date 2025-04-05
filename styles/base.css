@@ -104,7 +104,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-image: url('../images/gojo.jpg');
+    background-image: url('../images/officers/gojo.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
