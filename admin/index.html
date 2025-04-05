@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enigma Club Admin</title>
+    <link rel="stylesheet" href="../styles/base.css">
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Enigma Club Admin Panel</h1>
+            <button id="logout" style="display: none;">Logout</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="container">
+                <div id="login-container">
+                    <h2>Officer Login Required</h2>
+                    <button id="login">Login</button>
+                </div>
+
+                <div id="admin-panel" style="display: none;">
+                    <h2>Content Management</h2>
+                    <div class="admin-links">
+                        <a href="#" class="admin-link" id="edit-officers">Edit Officers</a>
+                        <a href="#" class="admin-link" id="edit-book-club">Edit Book Club</a>
+                        <a href="#" class="admin-link" id="edit-photos">Edit Photos</a>
+                    </div>
+                    <div id="editor-container"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let auth0Client = null;
+
+        // Initialize the Auth0 client
+        const configureClient = async () => {
+            auth0Client = await createAuth0Client({
+                domain: 'dev-aocpj8mqq35y2u7t.us.auth0.com', // replace with your domain
+                client_id: 'YY5iUnnZwtcuz137URhxG6yywMCZpCgs',  // replace with your client ID
+                redirect_uri: window.location.origin + '/admin'
+            });
+        };
+
+        // Handle the authentication flow
+        const handleAuth = async () => {
+            // Check if user is returning from Auth0 (callback)
+            if (location.search.includes('code=')) {
+                await auth0Client.handleRedirectCallback();
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            // Check if user is authenticated
+            const isAuthenticated = await auth0Client.isAuthenticated();
+            if (isAuthenticated) {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                document.getElementById('logout').style.display = 'inline-block';
+            } else {
+                document.getElementById('login-container').style.display = 'block';
+                document.getElementById('admin-panel').style.display = 'none';
+                document.getElementById('logout').style.display = 'none';
+            }
+        };
+
+        // Event listeners
+        window.addEventListener('load', async () => {
+            await configureClient();
+            await handleAuth();
+
+            // Setup login button
+            document.getElementById('login').addEventListener('click', async () => {
+                await auth0Client.loginWithRedirect();
+            });
+
+            // Setup logout button
+            document.getElementById('logout').addEventListener('click', async () => {
+                await auth0Client.logout({
+                    returnTo: window.location.origin + '/admin'
+                });
+            });
+
+            // Example editor link (you'll expand this)
+            document.getElementById('edit-officers').addEventListener('click', () => {
+                document.getElementById('editor-container').innerHTML = '<h3>Officer Editor</h3><p>Editor interface will go here</p>';
+            });
+        });
+    </script>
+</body>
+
+</html>

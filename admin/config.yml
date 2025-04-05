@@ -1,0 +1,33 @@
+backend:
+  name: github
+  repo: your-github-username/your-repo-name
+  branch: main # or master, depending on your default branch
+  auth_scope: repo
+
+media_folder: "images/uploads" # Where media files will be stored
+public_folder: "/images/uploads" # The src attribute for uploaded media
+
+collections:
+  - name: "officers"
+    label: "Officers"
+    folder: "_officers"
+    create: true
+    fields:
+      - {label: "Name", name: "name", widget: "string"}
+      - {label: "Position", name: "position", widget: "string"}
+      - {label: "Bio", name: "body", widget: "markdown"}
+      - {label: "Photo", name: "photo", widget: "image"}
+
+  - name: "book-club"
+    label: "Book Club"
+    file: "_data/book-club.json"
+    fields:
+      - {label: "Current Book", name: "currentBook", widget: "string"}
+      - {label: "Meeting Time", name: "meetingTime", widget: "string"}
+      - {label: "Book Cover", name: "bookCover", widget: "image"}
+      - label: "Previous Books"
+        name: "previousBooks"
+        widget: "list"
+        fields:
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Cover", name: "cover", widget: "image"}
