@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>Join Enigma</title>
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/join-enigma.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a class="nav-link" href="index.html">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="join-enigma.html">Join Enigma</a></li>
+                    <li class="nav-item"><a class="nav-link" href="events.html">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="officers.html">Officers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="book-club.html">Book Club</a></li>
+                    <li class="nav-item"><a class="nav-link" href="photos.html">Photos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
+                </ul>
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- This is just the modified section, not the full HTML document -->
+    <main>
+        <section class="hero-section">
+            <div class="container">
+                <div class="content-box">
+                    <!-- New div that combines the title and meeting details in a purple box -->
+                    <div class="title-and-meetings">
+                        <h1>Join Enigma</h1>
+                        <div class="about-text">
+                            <p>Weekly Meetings Every Quarter<br>Week 1-10, Tuesdays from 8:00 - 11:00 PM<br>Location:
+                                Ackerman Union</p>
+                        </div>
+                    </div>
+    
+                    <!-- Remove the divider that was between h1 and about-text -->
+    
+                    <div class="join-section">
+                        <div class="discord-container">
+                            <a href="https://discord.gg/znSnY93M23" class="discord-button" target="_blank">DISCORD</a>
+                            <p>Join our Discord server for announcements,<br>updates, information, and to chat and play
+                                games<br>online!</p>
+                        </div>
+                    </div>
+    
+                    <div class="divider"></div>
+    
+                    <div class="mailing-section">
+                        <h3>Mailing List</h3>
+                        <p>Join the Enigma mailing list to get a weekly reminder and description of what we'll be doing
+                            in the club.</p>
+                        <form action="https://formspree.io/f/mdobrozy" method="POST" class="mailing-form">
+                            <div class="form-group">
+                                <input type="text" placeholder="Enter your Name" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" placeholder="Enter your email address" id="email" name="email" required>
+                            </div>
+                            <div class="form-submit">
+                                <button type="submit" class="submit-button">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+    
+                    <div class="location-section">
+                        <div class="location-info">
+                            <h3>Location</h3>
+                            <p>Weekly meetings (excluding summer) are held in Ackerman Union.</p>
+                            <p>308 Westwood Plaza, Los Angeles, CA 90024</p>
+                        </div>
+                        <div class="location-map">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3305.2808924669713!2d-118.44566492346988!3d34.069861021870995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2bc88a96b9cdb%3A0x5814a4e1a9c39288!2s308%20Westwood%20Plaza%2C%20Los%20Angeles%2C%20CA%2090024!5e0!3m2!1sen!2sus!4v1712268151839!5m2!1sen!2sus"
+                                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="social-icons">
+                <a href="https://discord.gg/znSnY93M23" class="social-link" target="_blank">
+                    <img src="images/discord-icon.png" alt="Discord">
+                </a>
+                <a href="https://www.instagram.com/ucla_enigma/?hl=en" class="social-link" target="_blank">
+                    <img src="images/instagram-icon.png" alt="Instagram">
+                </a>
+                <a href="https://www.facebook.com/groups/enigma.UCLA/" class="social-link" target="_blank">
+                    <img src="images/facebook-icon.png" alt="Facebook">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple JavaScript for mobile menu toggle
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', function () {
+            document.querySelector('.nav-list').classList.toggle('active');
+        });
+    </script>
+</body>
+
+</html>
