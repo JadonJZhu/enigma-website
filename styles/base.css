@@ -1,0 +1,196 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+    /* Center all text by default */
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.6;
+    color: #000000;
+    background-color: #121212;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Header Styles */
+.header {
+    background-color: #000;
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.main-nav {
+    display: flex;
+    justify-content: center;
+}
+
+.nav-list {
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.nav-item {
+    margin: 0 10px;
+}
+
+.nav-link {
+    display: block;
+    padding: 10px;
+    color: #fff;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #59ff00;
+    /* Gold color */
+}
+
+.nav-link.active {
+    color: #ffd700;
+}
+
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: #fff;
+}
+
+/* Main content */
+main {
+    flex: 1 0 auto;
+    /* This makes the main content take up all available space */
+}
+
+/* Hero Section Styles */
+.hero-section {
+    padding: 80px 0;
+    /* Dark background */
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: url('../images/gojo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.content-box {
+    background-color: rgb(255, 255, 255);
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 8px;
+}
+
+h1 {
+    text-align: center;
+    /* Reinforcing center alignment for headings */
+    margin-bottom: 20px;
+    color: #000000;
+    font-size: 2rem;
+}
+
+h3 {
+    color: #000000;
+    font-size: 1.5rem;
+    margin: 25px 0 5px;
+}
+
+h4 {
+    color: #000000;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    font-weight: normal;
+}
+
+.divider {
+    height: 2px;
+    background-color: #000000;
+    width: 70%;
+    margin: 25px auto;
+    /* Changed to auto for horizontal centering */
+}
+
+.about-text {
+    text-align: center;
+    color: black;
+    /* Changed from left to center */
+    line-height: 1.6;
+}
+
+.about-text p {
+    text-align: center;
+    /* Ensure paragraphs are centered */
+    margin-bottom: 15px;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #000;
+    padding: 30px 0;
+    text-align: center;
+    flex-shrink: 0;
+    /* Prevents the footer from shrinking */
+    display: flex;
+    align-items: center;
+    /* Vertically centers content */
+    justify-content: center;
+    /* Horizontally centers content */
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Ensures vertical alignment */
+    gap: 50px;
+    /* Increased spacing between icons from 30px to 50px */
+}
+
+.social-link img {
+    width: 3rem;
+    /* Using rem instead of pixels */
+    height: 3rem;
+    /* Using rem instead of pixels */
+    transition: transform 0.3s;
+}
+
+.social-link:hover img {
+    transform: scale(1.2);
+}
