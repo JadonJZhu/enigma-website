@@ -24,13 +24,9 @@ This project uses a template-based approach where:
 
 1. Data is stored in CSV files (in the `/data/` directory)
 2. Templates define the structure of each page (in the `/templates/` directory)
-3. Generator scripts read the data and templates, then create the final HTML pages
+3. Generator scripts in `/generators/` read the data and templates, then create the final HTML pages
 
-This approach makes it easy to update content without changing the site structure, which is perfect for a club website where officer information, events, and other content change regularly.
-
-## Generator Scripts
-
-Each JavaScript file in the `/generators/` directory is responsible for generating a specific HTML page:
+This approach makes it easy to update content statically without going into the code directly.
 
 ### book-club.js
 
@@ -89,28 +85,26 @@ The `/data/` directory contains CSV files that store the site's content:
 
 ## Running the Generators
 
-To generate or update the HTML pages, you'll need to run each generator script using Node.js:
+To generate or update the HTML pages, you can run `build.js` using Node.js to run all the generator scripts:
 
 ```bash
 # Make sure you're in the project root directory
-node generators/book-club.js
-node generators/events.js
-node generators/officers.js
-node generators/photos.js
+node generators/build.js
 ```
 
 Each script will read the corresponding data and template files, generate the HTML, and write it to the output file in the root directory.
 
 ## Static Pages
 
-Some pages (like `index.html`, `contact-us.html`, `faq.html`, etc.) are static and not generated through this process. These pages can be modified directly.
+Some pages (i.e. `index.html`, `contact-us.html`, `faq.html`) are not generated through this process. These pages should be modified directly.
 
 ## Modifying the Website
 
-Here's how to make common changes:
+To update individual pages:
 
 ### To update the book club page:
 1. Edit the `data/book-club.csv` file
+1. Update images in `images/books/`
 2. Run `node generators/book-club.js`
 
 ### To update events:
@@ -139,7 +133,3 @@ Make sure these are installed:
 ```bash
 npm install csv-parser
 ```
-
-## Conclusion
-
-This project uses a simple but effective approach for maintaining a club website. By separating content (data) from presentation (templates), it allows for easy updates to site content without requiring deep HTML knowledge. The generator scripts bridge these components, creating static HTML files that can be hosted on any web server.
