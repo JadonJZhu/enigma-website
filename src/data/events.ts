@@ -1,82 +1,73 @@
 // Event data types
 export interface EventData {
-  date: string;
-  event: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  week: string;
+  quarter: string;
+  location: string;
+  description: string;
+  special: string;
 }
 
-// Parse CSV text and return array of events
-function parseCSV(csvText: string): EventData[] {
+// Parse master CSV text and return array of events
+function parseMasterCSV(csvText: string): EventData[] {
   const lines = csvText.trim().split('\n');
+  const headerLine = lines.shift();
+  if (!headerLine) return [];
 
-  // Find the header row (contains "Date" and "Event")
-  const headerIndex = lines.findIndex(line =>
-    line.includes('Date') && line.includes('Event')
-  );
+  const header = headerLine.split(',').map(h => h.trim());
+  const nameIndex = header.indexOf('Name');
+  const startTimeIndex = header.indexOf('Start Time');
+  const endTimeIndex = header.indexOf('End Time');
+  const weekIndex = header.indexOf('Week');
+  const quarterIndex = header.indexOf('Quarter');
+  const locationIndex = header.indexOf('Location');
+  const descriptionIndex = header.indexOf('Description');
+  const specialIndex = header.indexOf('Special');
 
-  if (headerIndex === -1) {
-    throw new Error('Could not find header row with Date and Event columns');
-  }
 
-  const events: EventData[] = [];
-
-  // Parse data rows after header
-  for (let i = headerIndex + 1; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue; // Skip empty lines
-
-    // Split by comma and clean up
-    const columns = line.split(',').map(col => col.trim().replace(/^["']|["']$/g, ''));
-
-    // Skip if not enough columns or if it's a header-like row
-    if (columns.length < 4 || columns[1] === 'Date') continue;
-
-    const date = columns[1];
-    const event = columns[3];
-
-    // Only include gaming-related events
-    
-      events.push({ date, event });
-  }
+  const events: EventData[] = lines
+    .map(line => {
+      if (!line.trim()) return null;
+      const values = line.split(',');
+      return {
+        name: values[nameIndex]?.trim() || '',
+        startTime: values[startTimeIndex]?.trim() || '',
+        endTime: values[endTimeIndex]?.trim() || '',
+        week: values[weekIndex]?.trim() || '',
+        quarter: values[quarterIndex]?.trim() || '',
+        location: values[locationIndex]?.trim() || '',
+        description: values[descriptionIndex]?.trim() || '',
+        special: values[specialIndex]?.trim() || '',
+      };
+    })
+    .filter((event): event is EventData => event !== null && !!event.name);
 
   return events;
 }
 
-// Load and parse the summer 2025 events
-export async function loadSummer2025Events(): Promise<EventData[]> {
-  try {
-    const response = await fetch('/data/summer-2025-events.csv');
-    const csvText = await response.text();
-    return parseCSV(csvText);
-  } catch (error) {
-    console.error('Error loading events:', error);
-    return [];
-  }
+// For static generation, use the raw CSV content
+import masterListCsvContent from './events-master-list.csv?raw';
+
+function slugify(text: string): string {
+    return text.toLowerCase().replace(/\s+/g, '-');
 }
 
-// For static generation, we'll use the raw CSV content
-import summerCsvContent from './summer-2025-game-nights.csv?raw';
-import fallCsvContent from './fall-2025-game-nights.csv?raw';
+// Load and parse all events, then group by quarter
+export function getEventsByQuarterStatic(): Record<string, EventData[]> {
+    const allEvents = parseMasterCSV(masterListCsvContent);
+    const eventsByQuarter: Record<string, EventData[]> = {};
 
-export function getSummer2025EventsStatic(): EventData[] {
-  return parseCSV(summerCsvContent);
-}
+    for (const event of allEvents) {
+        if (event.quarter) {
+            const quarterSlug = slugify(event.quarter);
+            if (!eventsByQuarter[quarterSlug]) {
+                eventsByQuarter[quarterSlug] = [];
+            }
+            eventsByQuarter[quarterSlug].push(event);
+        }
+    }
 
-export function getFall2025EventsStatic(): EventData[] {
-  return parseCSV(fallCsvContent);
-}
-
-// Helper function to format date for display
-export function formatEventDate(dateStr: string): { date: string; month: string; year: string } {
-  try {
-    const [month, day] = dateStr.split('/');
-    const date = new Date(2025, parseInt(month) - 1, parseInt(day));
-
-    return {
-      date: day,
-      month: date.toLocaleDateString('en-US', { month: 'short' }),
-      year: '2025'
-    };
-  } catch (error) {
-    return { date: dateStr, month: '', year: '2025' };
-  }
+    return eventsByQuarter;
 }
