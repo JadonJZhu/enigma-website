@@ -1,0 +1,490 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ - Enigma Board Game Club</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Raleway&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <Header />
+
+    <main>
+      <!-- Page Header -->
+      <section class="page-header">
+        <div class="container">
+          <h1 class="page-title">Frequently Asked Questions</h1>
+          <p class="page-subtitle">Your questions answered, adventurer!</p>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="faq-section">
+        <div class="container">
+          <div class="faq-container">
+            <!-- FAQ Item 1 -->
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span class="question-text">Do I need to bring my own games?</span>
+                <span class="faq-icon">▼</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Nope! We have an extensive game library with hundreds of games in our collection.
+                  From classic board games like Catan and Ticket to Ride to party games and strategy
+                  games, we've got you covered. We also regularly add new games to our library, so
+                  there's always something new to try!
+                </p>
+              </div>
+            </div>
+
+            <!-- FAQ Item 2 -->
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span class="question-text">I've never played a board game besides Monopoly. Can I still come?</span>
+                <span class="faq-icon">▼</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Absolutely! Enigma is welcoming to players of all experience levels. We have plenty
+                  of beginner-friendly games and our members are always excited to teach new players.
+                  In fact, many of our most dedicated members started with little to no board gaming
+                  experience. We believe everyone should have the opportunity to discover the joy
+                  of tabletop gaming!
+                </p>
+              </div>
+            </div>
+
+            <!-- FAQ Item 3 -->
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span class="question-text">Is there a membership fee?</span>
+                <span class="faq-icon">▼</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  No membership fees at all! Enigma is completely free to join and participate in.
+                  We want gaming to be accessible to everyone regardless of financial situation. The
+                  only costs you might encounter are optional tournament entry fees (usually just a
+                  few dollars) or if you want to purchase snacks for game nights.
+                </p>
+              </div>
+            </div>
+
+            <!-- FAQ Item 4 -->
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span class="question-text">Where and how often do you meet?</span>
+                <span class="faq-icon">▼</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  We meet weekly on Wednesdays from 7:00 PM to 10:00 PM at Ackerman Grand Ballroom.
+                  We also host special events like tournaments, introductory sessions, and themed
+                  game nights throughout the quarter. Check our Game Nights page for the complete
+                  schedule and any location changes.
+                </p>
+                <p>
+                  Additionally, we have a Discord server where members can organize casual game
+                  sessions, find people to play with, and stay connected between official meetings.
+                </p>
+              </div>
+            </div>
+
+            <!-- FAQ Item 5 -->
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span class="question-text">What kind of games do you play?</span>
+                <span class="faq-icon">▼</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  We play a huge variety of games! Our collection includes:
+                </p>
+                <ul>
+                  <li><strong>Strategy Games:</strong> Catan, Ticket to Ride, Twilight Imperium, Wingspan</li>
+                  <li><strong>Party Games:</strong> Codenames, Sushi Go, Love Letter, One Night Ultimate Werewolf</li>
+                  <li><strong>Roleplaying Games:</strong> Dungeons & Dragons, Pathfinder, various RPG systems</li>
+                  <li><strong>Social Deduction:</strong> The Resistance, Secret Hitler, Deception</li>
+                  <li><strong>Abstract Strategy:</strong> Chess, Go, Hive, Santorini</li>
+                  <li><strong>Eurogames:</strong> Agricola, Puerto Rico, Power Grid</li>
+                </ul>
+                <p>
+                  If you have a favorite game or want to learn something specific, just let us know
+                  and we'll do our best to accommodate!
+                </p>
+              </div>
+            </div>
+
+            <!-- FAQ Item 6 -->
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span class="question-text">Can I bring friends who aren't UCLA students?</span>
+                <span class="faq-icon">▼</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  We welcome all friends of current members to join us for game nights! While Enigma
+                  is officially a UCLA student organization, we love introducing new people to the
+                  hobby. Your friends are welcome to attend our weekly meetings and events as your
+                  guests. We just ask that they respect the space and our community guidelines.
+                </p>
+              </div>
+            </div>
+
+            <!-- FAQ Item 7 -->
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span class="question-text">Are there opportunities to compete in tournaments?</span>
+                <span class="faq-icon">▼</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Yes! We host regular tournaments throughout the year, including our famous Catan
+                  Championship, Strategy Game Showdown, and various one-off tournaments for specific
+                  games. We also participate in inter-collegiate gaming competitions and attend
+                  gaming conventions like PAX and Gen Con when possible.
+                </p>
+                <p>
+                  Tournament entry is usually free or very low-cost, with prizes ranging from
+                  bragging rights to gift cards and gaming accessories. No experience necessary
+                  for most tournaments!
+                </p>
+              </div>
+            </div>
+
+            <!-- FAQ Item 8 -->
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span class="question-text">What should I expect at my first game night?</span>
+                <span class="faq-icon">▼</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Your first visit should be fun and welcoming! Here's what typically happens:
+                </p>
+                <ul>
+                  <li>A brief introduction and icebreaker games to help you meet people</li>
+                  <li>Plenty of opportunities to learn new games or join ongoing ones</li>
+                  <li>Friendly members who are excited to teach you the rules</li>
+                  <li>Snacks and refreshments (feel free to bring your own if you have dietary needs)</li>
+                  <li>A chance to explore our game library and find your favorites</li>
+                </ul>
+                <p>
+                  Don't worry if you're shy or nervous - everyone was new once, and our community
+                  prides itself on being inclusive and supportive!
+                </p>
+              </div>
+            </div>
+
+            <!-- FAQ Item 9 -->
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span class="question-text">How do I get involved with club leadership or events?</span>
+                <span class="faq-icon">▼</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  We love getting new members involved! Here are some ways to get started:
+                </p>
+                <ul>
+                  <li><strong>Event Helpers:</strong> Join us for set up and take down at events</li>
+                  <li><strong>Game Library:</strong> Help organize, catalog, or repair our games</li>
+                  <li><strong>Social Media:</strong> Help document our events and share with the community</li>
+                  <li><strong>Teaching:</strong> Help run beginner sessions and teach new games</li>
+                  <li><strong>Leadership:</strong> Officer positions open up each year - talk to current officers!</li>
+                </ul>
+                <p>
+                  Just attend a few meetings and express your interest - we'll find the perfect role
+                  for your skills and interests!
+                </p>
+              </div>
+            </div>
+
+            <!-- FAQ Item 10 -->
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span class="question-text">Still have questions?</span>
+                <span class="faq-icon">▼</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  We're here to help! The best way to get answers to any other questions is to:
+                </p>
+                <ul>
+                  <li>Join our Discord server (link in the footer) and ask in the #questions channel</li>
+                  <li>Come to one of our weekly game nights and ask any officer directly</li>
+                  <li>Email us at enigma.ucla@gmail.com</li>
+                </ul>
+                <p>
+                  We love hearing from prospective members and are always happy to answer questions
+                  or provide more information about our community!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact CTA -->
+          <div class="contact-cta">
+            <h2 class="cta-title">Ready to Join the Adventure?</h2>
+            <p class="cta-text">
+              Have more questions or want to get started? We'd love to hear from you!
+            </p>
+            <a href="https://discord.gg/8hNAPTFK" class="cta-button">Join Our Discord</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  /* Page Header */
+  .page-header {
+    background: linear-gradient(135deg, var(--primary-color), #8E44AD);
+    color: white;
+    padding: 4rem 0 3rem;
+    text-align: center;
+  }
+
+  .page-title {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .page-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    font-family: 'Raleway', sans-serif;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* FAQ Section */
+  .faq-section {
+    background: var(--background-color);
+    padding: 3rem 0;
+  }
+
+  .faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .faq-question {
+    width: 100%;
+    background: white;
+    border: 2px solid var(--primary-color);
+    padding: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+  }
+
+  .faq-question:hover {
+    background: rgba(155, 89, 182, 0.05);
+  }
+
+  .faq-question[aria-expanded="true"] {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+  }
+
+  .faq-question[aria-expanded="true"] .faq-icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-icon {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+    color: var(--primary-color);
+  }
+
+  .faq-question[aria-expanded="true"] .faq-icon {
+    color: white;
+  }
+
+  .faq-answer {
+    background: rgba(155, 89, 182, 0.1);
+    border: 2px solid var(--primary-color);
+    border-top: none;
+    padding: 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    opacity: 0;
+  }
+
+  .faq-item.expanded .faq-answer {
+    max-height: 500px;
+    opacity: 1;
+    padding: 1.5rem;
+  }
+
+  .faq-answer p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+  }
+
+  .faq-answer ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .faq-answer li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+    color: var(--text-color);
+  }
+
+  .faq-answer strong {
+    color: var(--primary-color);
+  }
+
+  /* Contact CTA */
+  .contact-cta {
+    background: white;
+    padding: 3rem;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 4rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .cta-title {
+    font-size: 2rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+  }
+
+  .cta-text {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+  }
+
+  .cta-button:hover {
+    background: var(--secondary-color);
+    color: var(--text-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(241, 196, 15, 0.4);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .faq-question {
+      font-size: 1rem;
+      padding: 1.2rem;
+    }
+
+    .faq-answer {
+      padding: 1.2rem;
+    }
+
+    .contact-cta {
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+
+    .cta-title {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-header {
+      padding: 3rem 0 2rem;
+    }
+
+    .faq-section {
+      padding: 2rem 0;
+    }
+
+    .faq-question {
+      font-size: 0.95rem;
+      padding: 1rem;
+    }
+
+    .faq-answer {
+      padding: 1rem;
+    }
+
+    .contact-cta {
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+
+    faqQuestions.forEach(question => {
+      question.addEventListener('click', () => {
+        const faqItem = question.parentElement;
+        const isExpanded = question.getAttribute('aria-expanded') === 'true';
+
+        // Close all other items
+        faqQuestions.forEach(otherQuestion => {
+          if (otherQuestion !== question) {
+            otherQuestion.setAttribute('aria-expanded', 'false');
+            otherQuestion.parentElement.classList.remove('expanded');
+          }
+        });
+
+        // Toggle current item
+        if (!isExpanded) {
+          question.setAttribute('aria-expanded', 'true');
+          faqItem.classList.add('expanded');
+        } else {
+          question.setAttribute('aria-expanded', 'false');
+          faqItem.classList.remove('expanded');
+        }
+      });
+    });
+  });
+</script>

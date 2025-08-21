@@ -1,0 +1,389 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getSummer2025EventsStatic, getFall2025EventsStatic, formatEventDate, type EventData } from '../data/events';
+
+// Load events data
+const summer2025Events = getSummer2025EventsStatic();
+const fall2025Events = getFall2025EventsStatic();
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Nights - Enigma Board Game Club</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Raleway&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <Header />
+
+    <main>
+      <!-- Page Header -->
+      <section class="page-header">
+        <div class="container">
+          <h1 class="page-title">Game Nights</h1>
+          <p class="page-subtitle">Roll for initiative and join our adventure!</p>
+        </div>
+      </section>
+
+      <!-- Filter Section -->
+      <section class="filter-section">
+        <div class="container">
+          <div class="filter-controls">
+            <label for="quarter-select" class="filter-label">Select Quarter:</label>
+            <select id="quarter-select" class="filter-dropdown">
+              <option value="summer-2025" selected>Summer Quarter 2025</option>
+              <option value="fall-2025">Fall Quarter 2025</option>
+              <option value="winter-2026">Winter Quarter 2026</option>
+              <option value="spring-2026">Spring Quarter 2026</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Events List -->
+      <section class="events-section">
+        <div class="container">
+          <div id="events-list" class="events-list">
+            <!-- Events will be populated by JavaScript -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+
+    <template id="event-item-template">
+      <div class="event-item">
+        <div class="event-date">
+          <span class="date"></span>
+          <span class="month"></span>
+          <span class="year"></span>
+        </div>
+        <div class="event-content">
+          <h3 class="event-title"></h3>
+          <div class="event-details">
+            <span class="time">🕐 8:00 PM</span>
+            <span class="location">📍 Virtual Event</span>
+          </div>
+          <p class="event-description"></p>
+        </div>
+      </div>
+    </template>
+
+    <script define:vars={{ summer2025Events, fall2025Events }}>
+      // Event data
+      const eventData = {
+        'summer-2025': summer2025Events,
+        'fall-2025': fall2025Events
+      };
+
+      // Function to format date for display
+      function formatEventDate(dateStr) {
+        try {
+          const [month, day] = dateStr.split('/');
+          const date = new Date(2025, parseInt(month) - 1, parseInt(day));
+
+          return {
+            date: day,
+            month: date.toLocaleDateString('en-US', { month: 'short' }),
+            year: '2025'
+          };
+        } catch (error) {
+          return { date: dateStr, month: '', year: '2025' };
+        }
+      }
+
+      // Function to render events
+      function renderEvents(events, quarter) {
+        const eventsList = document.getElementById('events-list');
+        const template = document.getElementById('event-item-template');
+        eventsList.innerHTML = ''; // Clear previous events
+
+        if (events.length > 0) {
+          events.forEach(event => {
+            const formattedDate = formatEventDate(event.date);
+            const eventItem = template.content.cloneNode(true);
+
+            eventItem.querySelector('.date').textContent = formattedDate.date;
+            eventItem.querySelector('.month').textContent = formattedDate.month;
+            eventItem.querySelector('.year').textContent = formattedDate.year;
+            eventItem.querySelector('.event-title').textContent = event.event;
+            eventItem.querySelector('.event-description').textContent = `Join us for this exciting ${event.event.toLowerCase()}!`;
+
+            eventsList.appendChild(eventItem);
+          });
+        } else {
+          // Special handling for 2026 quarters
+          if (quarter === 'winter-2026' || quarter === 'spring-2026') {
+            eventsList.innerHTML = `
+              <div class="no-events">
+                <p>Events for this quarter have not been decided yet. Join our <a href="https://discord.gg/enigma" target="_blank" class="discord-link">Discord server</a> to get notified when events are announced.</p>
+              </div>
+            `;
+          } else {
+            eventsList.innerHTML = `
+              <div class="no-events">
+                <p>No events scheduled for this quarter yet. Check back soon!</p>
+              </div>
+            `;
+          }
+        }
+      }
+
+      // Handle quarter selection change
+      function handleQuarterChange() {
+        const quarterSelect = document.getElementById('quarter-select');
+        const selectedQuarter = quarterSelect.value;
+        const events = eventData[selectedQuarter] || [];
+        renderEvents(events, selectedQuarter);
+      }
+
+      // Initialize page
+      document.addEventListener('DOMContentLoaded', function() {
+        const quarterSelect = document.getElementById('quarter-select');
+        quarterSelect.addEventListener('change', handleQuarterChange);
+
+        // Load initial events (summer 2025 by default)
+        handleQuarterChange();
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  /* Page Header */
+  .page-header {
+    background: linear-gradient(135deg, var(--primary-color), #8E44AD);
+    color: white;
+    padding: 4rem 0 3rem;
+    text-align: center;
+  }
+
+  .page-title {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .page-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    font-family: 'Raleway', sans-serif;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Filter Section */
+  .filter-section {
+    background: white;
+    padding: 2rem 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: var(--text-color);
+    font-size: 1rem;
+  }
+
+  .filter-dropdown {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 6px;
+    background: white;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .filter-dropdown:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.2);
+  }
+
+  /* Events Section */
+  .events-section {
+    padding: 3rem 0;
+    background: var(--background-color);
+  }
+
+  .events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .event-item {
+    display: flex;
+    background: white;
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .event-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .event-date {
+    background: var(--primary-color);
+    color: white;
+    padding: 2rem 1rem;
+    text-align: center;
+    min-width: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    gap: 0.5rem;
+  }
+
+  .date {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    display: block;
+  }
+
+  .month {
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin: 0.2rem 0;
+  }
+
+  .year {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    display: block;
+  }
+
+  .event-content {
+    padding: 2rem;
+    flex: 1;
+  }
+
+  .event-title {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .event-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: #666;
+  }
+
+  .time, .location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .event-description {
+    color: #555;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  .no-events {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .no-events p {
+    color: #666;
+    font-size: 1.1rem;
+    font-family: 'Raleway', sans-serif;
+    margin-bottom: 0.5rem;
+  }
+
+  .discord-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+
+  .discord-link:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .event-item {
+      flex-direction: column;
+    }
+
+    .event-date {
+      min-width: auto;
+      padding: 1.5rem 1rem;
+    }
+
+    .date {
+      font-size: 2rem;
+    }
+
+    .month {
+      font-size: 1rem;
+    }
+
+    .event-date {
+      gap: 0.3rem;
+    }
+
+    .event-details {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .filter-controls {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-header {
+      padding: 3rem 0 2rem;
+    }
+
+    .event-content {
+      padding: 1.5rem;
+    }
+
+    .event-title {
+      font-size: 1.3rem;
+    }
+  }
+</style>

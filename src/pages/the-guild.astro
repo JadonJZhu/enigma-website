@@ -1,0 +1,379 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Guild - Enigma Board Game Club</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Raleway&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <Header />
+
+    <main>
+      <!-- Page Header -->
+      <section class="page-header">
+        <div class="container">
+          <h1 class="page-title">The Guild</h1>
+          <p class="page-subtitle">Meet the masterminds behind Enigma's adventures</p>
+        </div>
+      </section>
+
+      <!-- Mission Section -->
+      <section class="mission-section">
+        <div class="container">
+          <div class="mission-content">
+            <h2 class="section-title">Our Mission</h2>
+            <div class="mission-text">
+              <p>
+                Enigma is more than just a club – we're a fellowship of adventurers, strategists, and storytellers
+                united by our love of tabletop gaming. Whether you're rolling dice for the first time or commanding
+                fleets in interstellar wars, you'll find a welcoming community ready to share in the excitement
+                of the game.
+              </p>
+              <p>
+                Our mission is to create an inclusive space where players of all experience levels can gather,
+                learn, and grow together. We believe that the best games happen when diverse perspectives come
+                together around the table, creating memorable experiences that extend far beyond the final score.
+              </p>
+              <p>
+                From casual game nights to tournament-style competitions, from learning the basics of Dungeons
+                & Dragons to exploring the depths of complex strategy games, Enigma provides the platform and
+                community for you to level up your gaming experience while making lifelong friends along the way.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Officers Section -->
+      <section class="officers-section">
+        <div class="container">
+          <h2 class="section-title">Meet the Guild Masters 🧙</h2>
+          <div class="officers-grid">
+            <!-- Officer 1: President/Guild Master -->
+            <div class="officer-card">
+              <div class="officer-avatar">
+                <div class="avatar-placeholder">
+                  <span class="avatar-emoji">👑</span>
+                </div>
+              </div>
+              <div class="officer-info">
+                <h3 class="officer-name">Alex Rodriguez</h3>
+                <h4 class="officer-title">Guild Master</h4>
+                <p class="officer-bio">
+                  Fourth-year Computer Science major and D&D enthusiast. Has run campaigns since freshman year
+                  and dreams in dice rolls. Always ready with a pun and a plan for the next big game night.
+                </p>
+              </div>
+            </div>
+
+            <!-- Officer 2: Vice President -->
+            <div class="officer-card">
+              <div class="officer-avatar">
+                <div class="avatar-placeholder">
+                  <span class="avatar-emoji">🛡️</span>
+                </div>
+              </div>
+              <div class="officer-info">
+                <h3 class="officer-name">Jordan Chen</h3>
+                <h4 class="officer-title">Keeper of Events</h4>
+                <p class="officer-bio">
+                  Third-year Environmental Science major with a passion for strategic games. Excelled at
+                  organizing our first Catan tournament and now leads all event planning. Also our resident
+                  expert on sustainable gaming (eco-friendly dice bags included).
+                </p>
+              </div>
+            </div>
+
+            <!-- Officer 3: Treasurer -->
+            <div class="officer-card">
+              <div class="officer-avatar">
+                <div class="avatar-placeholder">
+                  <span class="avatar-emoji">💰</span>
+                </div>
+              </div>
+              <div class="officer-info">
+                <h3 class="officer-name">Sam Thompson</h3>
+                <h4 class="officer-title">Keeper of Coin</h4>
+                <p class="officer-bio">
+                  Business Economics major who treats game budgets like a complex strategy puzzle. Famous
+                  for finding the best deals on games and somehow turning our minimal budget into maximum
+                  gaming experiences. Also our unofficial banker during Monopoly nights.
+                </p>
+              </div>
+            </div>
+
+            <!-- Officer 4: Secretary -->
+            <div class="officer-card">
+              <div class="officer-avatar">
+                <div class="avatar-placeholder">
+                  <span class="avatar-emoji">📜</span>
+                </div>
+              </div>
+              <div class="officer-info">
+                <h3 class="officer-name">Morgan Lee</h3>
+                <h4 class="officer-title">Scribe of Records</h4>
+                <p class="officer-bio">
+                  English major and creative writing extraordinaire. Documents all our adventures with
+                  vivid detail and maintains our ever-growing library of game recommendations. If you
+                  need to know what happened at any event since the beginning of time, Morgan's got you covered.
+                </p>
+              </div>
+            </div>
+
+            <!-- Officer 5: Social Media -->
+            <div class="officer-card">
+              <div class="officer-avatar">
+                <div class="avatar-placeholder">
+                  <span class="avatar-emoji">📸</span>
+                </div>
+              </div>
+              <div class="officer-info">
+                <h3 class="officer-name">Taylor Kim</h3>
+                <h4 class="officer-title">Master of Tales</h4>
+                <p class="officer-bio">
+                  Communications major and social media wizard. Captures the best moments from our game
+                  nights and shares them with the world. Also our resident photographer who somehow makes
+                  even the most chaotic board game sessions look epic.
+                </p>
+              </div>
+            </div>
+
+            <!-- Officer 6: Outreach -->
+            <div class="officer-card">
+              <div class="officer-avatar">
+                <div class="avatar-placeholder">
+                  <span class="avatar-emoji">🌟</span>
+                </div>
+              </div>
+              <div class="officer-info">
+                <h3 class="officer-name">Casey Johnson</h3>
+                <h4 class="officer-title">Ambassador of Fun</h4>
+                <p class="officer-bio">
+                  Psychology major with a knack for making everyone feel welcome. Leads our outreach
+                  efforts and introduction events, ensuring new members have the best first impression
+                  of Enigma. Believes the best game is one where everyone leaves with a smile.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  /* Page Header */
+  .page-header {
+    background: linear-gradient(135deg, var(--primary-color), #8E44AD);
+    color: white;
+    padding: 4rem 0 3rem;
+    text-align: center;
+  }
+
+  .page-title {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .page-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    font-family: 'Raleway', sans-serif;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Mission Section */
+  .mission-section {
+    background: white;
+    padding: 4rem 0;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .section-title:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--secondary-color);
+    border-radius: 2px;
+  }
+
+  .mission-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .mission-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .mission-text p:first-child {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  /* Officers Section */
+  .officers-section {
+    background: var(--background-color);
+    padding: 4rem 0;
+  }
+
+  .officers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .officer-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+    background-image: linear-gradient(white, white), var(--rainbow-gradient);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .officer-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.05), rgba(241, 196, 15, 0.05));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .officer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .officer-card:hover::before {
+    opacity: 1;
+  }
+
+  .officer-avatar {
+    margin-bottom: 1.5rem;
+  }
+
+  .avatar-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+  }
+
+  .avatar-emoji {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .officer-name {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  .officer-title {
+    font-size: 1rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-style: italic;
+  }
+
+  .officer-bio {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #666;
+    margin: 0;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .officers-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .mission-text p {
+      text-align: left;
+    }
+
+    .avatar-placeholder {
+      width: 100px;
+      height: 100px;
+    }
+
+    .avatar-emoji {
+      font-size: 2.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-header {
+      padding: 3rem 0 2rem;
+    }
+
+    .mission-section,
+    .officers-section {
+      padding: 3rem 0;
+    }
+
+    .officer-card {
+      padding: 1.5rem;
+    }
+
+    .officer-name {
+      font-size: 1.3rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+  }
+</style>
