@@ -1,32 +1,31 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Run this workflow on pushes to the main branch
   push:
-    branches: [ revamp_25-26 ]
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    
+    permissions:     
+      contents: write 
+
     steps:
-      # 1. Checks out your repository's code from the main branch
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      # 2. Sets up Node.js for the build process
       - name: Setup Node.js 🏗️
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      # 3. Installs dependencies and builds the site
       - name: Install and Build 🔨
         run: |
           npm install
           npm run build
 
-      # 4. Deploys the contents of the /dist folder to the gh-pages branch
       - name: Deploy 🚀
         uses: peaceiris/actions-gh-pages@v3
         with:
