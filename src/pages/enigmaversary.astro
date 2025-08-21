@@ -1,0 +1,529 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enigmaversary - Enigma at UCLA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Raleway&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <Header />
+
+    <main>
+      <!-- Hero Section with Logo -->
+      <section class="enigmaversary-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <div class="logo-container">
+            <img src={enigmaversaryLogo.src} alt="Enigmaversary 40 Logo" class="enigmaversary-logo" />
+          </div>
+          <h1 class="hero-title">Enigmaversary 40!</h1>
+          <p class="hero-subtitle">
+            Hello Enigmans, Enigmaniacs, and Enigmata! We're excited to announce the 40 year anniversary of Enigma, scheduled for 2026!
+          </p>
+        </div>
+      </section>
+
+      <!-- Main Content Section -->
+      <section class="enigmaversary-content">
+        <div class="container">
+          <div class="content-section">
+            <h2 class="section-title">Celebrating 40 Years of Enigma</h2>
+            <div class="celebration-text">
+              <p>
+                Over the past 40 years, we have explored the worlds of science fiction, fantasy, horror, LARPs, tabletop RPGs, board games, and every kind of nerd- and geekdom at UCLA. We hope you will join us in 2026 to celebrate our past, present, and future.
+              </p>
+            </div>
+          </div>
+
+          <div class="info-grid">
+            <!-- Event Details -->
+            <div class="info-card">
+              <div class="info-icon">📅</div>
+              <h3 class="info-title">When</h3>
+              <p class="info-text">
+                MLK Day weekend<br>
+                Friday Jan. 16 - Monday Jan 19, 2026
+              </p>
+            </div>
+
+            <div class="info-card">
+              <div class="info-icon">📍</div>
+              <h3 class="info-title">Where</h3>
+              <p class="info-text">
+                UCLA campus<br>
+                Westwood, and downtown LA
+              </p>
+            </div>
+
+            <div class="info-card">
+              <div class="info-icon">🎲</div>
+              <h3 class="info-title">What</h3>
+              <p class="info-text">
+                Games, reminiscing, games, reunion, games, parties, games, and every kind of fun
+              </p>
+            </div>
+          </div>
+
+          <!-- How to Participate -->
+          <div class="participation-section">
+            <h2 class="section-title">How to Participate</h2>
+            <div class="participation-content">
+              <ul class="participation-list">
+                <li>RSVP to <a href="https://forms.gle/YxVvjzeGsa59xRSe6" target="_blank" rel="noopener noreferrer" class="participation-link">our form</a> if you haven't already</li>
+                <li>Contact us at <a href="mailto:enigma.uclaofficers@gmail.com" class="email-link">enigma.uclaofficers@gmail.com</a> or on <a href="https://discord.gg/8hNAPTFK" target="_blank" rel="noopener noreferrer" class="participation-link">Discord</a> to get involved with planning, share ideas for events, or ask any questions</li>
+                <li>Pull out your archives of photos, documents, flyers, and props from every era! We want to see the records of Enigma history</li>
+                <li>Find your way to Los Angeles in January 2026!</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Tentative Schedule -->
+          <div class="schedule-section">
+            <h2 class="section-title">Tentative Schedule</h2>
+            <div class="schedule-content">
+              <div class="schedule-item">
+                <div class="schedule-date">
+                  <span class="date">Friday Jan. 16</span>
+                </div>
+                <div class="schedule-details">
+                  <h4>Gaming and Zombie Tag in the evening</h4>
+                </div>
+              </div>
+
+              <div class="schedule-item">
+                <div class="schedule-date">
+                  <span class="date">Saturday Jan. 17</span>
+                </div>
+                <div class="schedule-details">
+                  <h4>All-day extravaganza at a house in central LA</h4>
+                  <p>with festivities, group games, celebrations of Enigma history, potluck lunch, and taco truck dinner</p>
+                </div>
+              </div>
+
+              <div class="schedule-item">
+                <div class="schedule-date">
+                  <span class="date">Sunday Jan. 18</span>
+                </div>
+                <div class="schedule-details">
+                  <h4>Gaming, ultimate frisbee, basketball, and other activities at UCLA or across town</h4>
+                  <p>Book a venue for a large group dinner in the evening</p>
+                </div>
+              </div>
+
+              <div class="schedule-item">
+                <div class="schedule-date">
+                  <span class="date">Monday Jan 19</span>
+                </div>
+                <div class="schedule-details">
+                  <h4>Nothing official!</h4>
+                  <p>Play games, visit sites in LA, or do whatever you want</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  /* Sunset color scheme variables */
+  :root {
+    --sunset-red: #FF6B6B;
+    --sunset-orange: #FFA726;
+    --sunset-yellow: #FFEB3B;
+    --sunset-gradient: linear-gradient(135deg, #FF6B6B, #FFA726, #FFEB3B, #FF8A65);
+    --sunset-bg: linear-gradient(180deg, #FFFAF0 0%, #FFF8E0 50%, #FFF4E0 100%);
+  }
+
+  /* Hero Section */
+  .enigmaversary-hero {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    min-height: 500px;
+    background: var(--sunset-bg);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .enigmaversary-hero .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 107, 107, 0.1), rgba(255, 167, 38, 0.1));
+    z-index: 1;
+  }
+
+  .enigmaversary-hero .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 1000px;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+  }
+
+  .logo-container {
+    margin-bottom: 2rem;
+  }
+
+  .enigmaversary-logo {
+    max-width: 500px;
+    height: auto;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+  }
+
+  .enigmaversary-logo:hover {
+    transform: scale(1.05);
+  }
+
+  .enigmaversary-hero .hero-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    margin: 0 0 1.5rem 0;
+    line-height: 1.3;
+    background: linear-gradient(45deg, #ff6f00, #ffd382);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .enigmaversary-hero .hero-subtitle {
+    font-family: 'Raleway', sans-serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    color: #2a2525;
+    margin: 0 0 2rem 0;
+    line-height: 1.6;
+
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Body background for entire page */
+  body {
+    background: linear-gradient(180deg, #FFFAF0 0%, #FFF8E0 50%, #FFF4E0 100%);
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  /* Content Sections */
+  .enigmaversary-content {
+    padding: 4rem 0;
+    background: linear-gradient(180deg, #FFF4E0 0%, #FFF0D0 50%, #FFEBB8 100%);
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .content-section {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  .section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--sunset-red);
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--sunset-gradient);
+    border-radius: 2px;
+  }
+
+  .celebration-text {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #5D4037;
+  }
+
+  .celebration-text p {
+    margin-bottom: 1.5rem;
+  }
+
+  /* Info Grid */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .info-card {
+    background: linear-gradient(135deg, #FFFFFF, #FFF3E0);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.15);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    transition: all 0.3s ease;
+  }
+
+  .info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(255, 107, 107, 0.25);
+    border-color: var(--sunset-orange);
+  }
+
+  .info-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .info-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--sunset-orange);
+    margin-bottom: 1rem;
+  }
+
+  .info-text {
+    color: #5D4037;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  /* Participation Section */
+  .participation-section {
+    margin-bottom: 4rem;
+  }
+
+  .participation-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .participation-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .participation-list li {
+    position: relative;
+    padding: 1rem 0 1rem 2rem;
+    color: #5D4037;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(255, 167, 38, 0.2);
+  }
+
+  .participation-list li::before {
+    content: '🎯';
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    font-size: 1.2rem;
+  }
+
+  .participation-list li:last-child {
+    border-bottom: none;
+  }
+
+  .email-link {
+    color: var(--sunset-red);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .email-link:hover {
+    color: var(--sunset-orange);
+  }
+
+  .participation-link {
+    color: var(--sunset-red);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .participation-link:hover {
+    color: var(--sunset-orange);
+  }
+
+  /* Schedule Section */
+  .schedule-section {
+    margin-bottom: 2rem;
+  }
+
+  .schedule-content {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .schedule-item {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #FFFFFF, #fca791);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(255, 167, 38, 0.1);
+    border-left: 4px solid var(--sunset-orange);
+    transition: all 0.3s ease;
+  }
+
+  .schedule-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 8px 25px rgba(255, 167, 38, 0.2);
+  }
+
+  .schedule-date {
+    flex-shrink: 0;
+    min-width: 140px;
+  }
+
+  .schedule-date .date {
+    display: inline-block;
+    background: var(--sunset-gradient);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  }
+
+  .schedule-details h4 {
+    color: var(--sunset-red);
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .schedule-details p {
+    color: #5D4037;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  /* Floating animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .enigmaversary-hero {
+      height: 60vh;
+      min-height: 400px;
+    }
+
+    .logo-container {
+      margin-bottom: 1.5rem;
+    }
+
+    .enigmaversary-logo {
+      max-width: 350px;
+    }
+
+    .enigmaversary-hero .hero-title {
+      font-size: 2.2rem;
+    }
+
+    .enigmaversary-hero .hero-subtitle {
+      font-size: 1.1rem;
+    }
+
+    .info-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .schedule-item {
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1.2rem;
+    }
+
+    .schedule-date {
+      min-width: auto;
+      align-self: flex-start;
+    }
+
+    .participation-list li {
+      padding-left: 1.8rem;
+    }
+
+    .participation-list li::before {
+      font-size: 1rem;
+      top: 0.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .enigmaversary-hero {
+      height: 50vh;
+      min-height: 350px;
+    }
+
+    .enigmaversary-logo {
+      max-width: 250px;
+    }
+
+    .enigmaversary-hero .hero-title {
+      font-size: 1.8rem;
+    }
+
+    .enigmaversary-hero .hero-subtitle {
+      font-size: 1rem;
+      padding: 0 1rem;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .info-card {
+      padding: 1.5rem;
+    }
+
+    .schedule-item {
+      padding: 1rem;
+    }
+  }
+</style>

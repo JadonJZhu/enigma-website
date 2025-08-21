@@ -46,56 +46,69 @@ import Footer from '../components/Footer.astro';
               <div class="main-image-wrapper">
                 <img
                   id="main-image"
-                  src="/src/assets/photos/24-25/enigmatable.webp"
-                  alt="Enigma members at their regular game table"
+                  src="https://images.unsplash.com/photo-1614680376739-414d95ff43df?q=80&w=2574&auto=format&fit=crop"
+                  alt="Enigma members gathered around a board game table"
                   class="main-image"
                 />
                 <div class="image-overlay"></div>
                 <button class="nav-arrow prev-arrow" id="prev-btn" aria-label="Previous image">❮</button>
                 <button class="nav-arrow next-arrow" id="next-btn" aria-label="Next image">❯</button>
               </div>
-
+              <div class="image-caption" id="image-caption">
+                The epic final turn of our Twilight Imperium game where alliances crumbled and a new galactic emperor was crowned.
+              </div>
             </div>
 
             <!-- Thumbnail Strip -->
             <div class="thumbnail-strip">
               <div class="thumbnail-container" id="thumbnail-container">
-                <img src="/src/assets/photos/24-25/enigmatable.webp"
-                     alt="Enigma members at their regular game table"
+                <img src="https://images.unsplash.com/photo-1614680376739-414d95ff43df?q=80&w=2574&auto=format&fit=crop"
+                     alt="Twilight Imperium final turn"
                      class="thumbnail active"
-                     data-index="0" />
+                     data-index="0"
+                     data-caption="The epic final turn of our Twilight Imperium game where alliances crumbled and a new galactic emperor was crowned." />
 
-                <img src="/src/assets/photos/24-25/someevent.webp"
-                     alt="Enigma members at a special event"
+                <img src="https://images.unsplash.com/photo-1558060370-d644479cb6f7?q=80&w=2574&auto=format&fit=crop"
+                     alt="Catan tournament winners"
                      class="thumbnail"
-                     data-index="1" />
+                     data-index="1"
+                     data-caption="Our annual Catan tournament champions celebrating their victory with the coveted golden meeple trophy." />
 
-                <img src="/src/assets/photos/24-25/trivia.webp"
-                     alt="Enigma trivia night"
+                <img src="https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?q=80&w=2574&auto=format&fit=crop"
+                     alt="D&D campaign session"
                      class="thumbnail"
-                     data-index="2" />
+                     data-index="2"
+                     data-caption="An intense Dungeons & Dragons session where our brave adventurers finally confronted the dragon in its lair." />
 
-                <img src="/src/assets/photos/24-25/picnic.webp"
-                     alt="Enigma picnic event"
+                <img src="https://images.unsplash.com/photo-1586182987323-4f376d39d787?q=80&w=2574&auto=format&fit=crop"
+                     alt="New member welcome event"
                      class="thumbnail"
-                     data-index="3" />
+                     data-index="3"
+                     data-caption="Welcoming our newest guild members with a special introductory game night featuring everyone's favorites." />
 
-                <img src="/src/assets/photos/24-25/westmarchesfinal.jpg"
-                     alt="West Marches campaign final session"
+                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=2574&auto=format&fit=crop"
+                     alt="Game library expansion"
                      class="thumbnail"
-                     data-index="4" />
+                     data-index="4"
+                     data-caption="Expanding our game library with new arrivals - from classic strategy to the latest party games." />
 
-                <img src="/src/assets/photos/24-25/fridaynight.webp"
-                     alt="Enigma Friday night gaming session"
+                <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?q=80&w=2574&auto=format&fit=crop"
+                     alt="Holiday game night"
                      class="thumbnail"
-                     data-index="5" />
+                     data-index="5"
+                     data-caption="Our festive holiday game night with themed decorations and gift exchange featuring board game expansions." />
 
-                <img src="/src/assets/photos/24-25/morepicnic.webp"
-                     alt="Enigma members at another picnic event"
+                <img src="https://images.unsplash.com/photo-1632501641765-e568d28b0015?q=80&w=2574&auto=format&fit=crop"
+                     alt="Strategy game tournament"
                      class="thumbnail"
-                     data-index="6" />
+                     data-index="6"
+                     data-caption="Intense concentration during our strategy game tournament - where minds battled as fiercely as any armies." />
 
-
+                <img src="https://images.unsplash.com/photo-1594736797933-d0eb4e599d7b?q=80&w=2574&auto=format&fit=crop"
+                     alt="Outdoor game day"
+                     class="thumbnail"
+                     data-index="7"
+                     data-caption="Taking our games outdoors for a beautiful spring day on campus - fresh air and friendly competition." />
               </div>
             </div>
           </div>
@@ -105,7 +118,7 @@ import Footer from '../components/Footer.astro';
             <div class="info-box">
               <h3 class="info-title">📸 Capture the Moment</h3>
               <p class="info-text">
-                Want to see your club photos featured here? Tag us on social media or send your
+                Want to see your Enigma event photos featured here? Tag us on social media or send your
                 best moments to an officer. We'd love to showcase the fun and
                 community that makes Enigma special!
               </p>
@@ -249,7 +262,16 @@ import Footer from '../components/Footer.astro';
     right: 20px;
   }
 
-
+  .image-caption {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-style: italic;
+    color: var(--text-color);
+    line-height: 1.6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
 
   /* Thumbnail Strip */
   .thumbnail-strip {
@@ -367,23 +389,28 @@ import Footer from '../components/Footer.astro';
       height: 60px;
     }
 
-
+    .image-caption {
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
   }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const mainImage = document.getElementById('main-image') as HTMLImageElement;
-    const thumbnails = document.querySelectorAll('.thumbnail') as NodeListOf<HTMLImageElement>;
-    const prevBtn = document.getElementById('prev-btn') as HTMLButtonElement;
-    const nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
+    const mainImage = document.getElementById('main-image');
+    const imageCaption = document.getElementById('image-caption');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
 
     let currentIndex = 0;
 
-    function updateMainImage(index: number) {
+    function updateMainImage(index) {
       const thumbnail = thumbnails[index];
       mainImage.src = thumbnail.src;
       mainImage.alt = thumbnail.alt;
+      imageCaption.textContent = thumbnail.dataset.caption;
 
       // Update active thumbnail
       thumbnails.forEach((thumb, i) => {
