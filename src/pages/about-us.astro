@@ -3,12 +3,12 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-// Import all officer images
-const officerImages = import.meta.glob('/src/assets/officers/*.JPG');
-
 // Import officers data
 import fs from 'fs';
 import path from 'path';
+
+// Import all officer images
+const officerImages = import.meta.glob('../assets/officers/*.JPG');
 
 const csvPath = path.resolve('./src/data/officers-master-list.csv');
 const csvContent = fs.readFileSync(csvPath, 'utf-8');
@@ -24,11 +24,11 @@ const officersData = csvContent.trim().split('\n').slice(1).map(line => {
 // Function to get image filename for an officer
 async function getOfficerImage(name: string) {
   const imageName = name.toLowerCase().replace(/\s+/g, '');
-  const imagePath = `/src/assets/officers/${imageName}.JPG`;
+  const imagePath = `../assets/officers/${imageName}.JPG`;
   
   if (officerImages[imagePath]) {
-    const image = await officerImages[imagePath]();
-    return image.default;
+    const imageModule = await officerImages[imagePath]() as { default: { src: string } };
+    return imageModule.default.src;
   }
   
   return null; // or a default image path
