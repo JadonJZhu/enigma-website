@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ revamp_25-26 ]
 
 jobs:
   build-and-deploy:
