@@ -3,6 +3,9 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
+// Import all officer images
+const officerImages = import.meta.glob('/src/assets/officers/*.JPG');
+
 // Import officers data
 import fs from 'fs';
 import path from 'path';
@@ -19,15 +22,16 @@ const officersData = csvContent.trim().split('\n').slice(1).map(line => {
 });
 
 // Function to get image filename for an officer
-function getOfficerImageFilename(name: string) {
-  return `/src/assets/officers/${name.toLowerCase().replace(/\s+/g, '')}.JPG`;
-}
-
-// Function to check if image exists (client-side check)
-function getOfficerImage(name: string) {
-  const filename = getOfficerImageFilename(name);
-  // We'll handle missing images with CSS/JS on the client side
-  return filename;
+async function getOfficerImage(name: string) {
+  const imageName = name.toLowerCase().replace(/\s+/g, '');
+  const imagePath = `/src/assets/officers/${imageName}.JPG`;
+  
+  if (officerImages[imagePath]) {
+    const image = await officerImages[imagePath]();
+    return image.default;
+  }
+  
+  return null; // or a default image path
 }
 ---
 
@@ -91,19 +95,23 @@ function getOfficerImage(name: string) {
           </div>
 
           <div class="officers-grid">
-            {officersData.map((officer) => (
+            {officersData.map(async (officer) => {
+              const imageSrc = await getOfficerImage(officer.name);
+              return (
               <div class="officer-card">
                 <div class="officer-avatar">
                   <div class={`avatar-container ${officer.name.toLowerCase().replace(/\s+/g, '')}`}>
-                    <img
-                      src={getOfficerImage(officer.name)}
-                      alt={`${officer.name} profile photo`}
-                      class="officer-image"
-                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                    />
-                    <div class="avatar-placeholder" style="display: none;">
-                      <span class="avatar-emoji">👤</span>
-                    </div>
+                    {imageSrc ? (
+                      <img
+                        src={imageSrc}
+                        alt={`${officer.name} profile photo`}
+                        class="officer-image"
+                      />
+                    ) : (
+                      <div class="avatar-placeholder">
+                        <span class="avatar-emoji">👤</span>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div class="officer-info">
@@ -114,7 +122,7 @@ function getOfficerImage(name: string) {
                   </p>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </div>
       </section>
