@@ -1,7 +1,16 @@
 ---
+import { Image } from 'astro:assets';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
+import enigmatable from '../assets/photos/24-25/enigmatable.webp';
+import someevent from '../assets/photos/24-25/someevent.webp';
+import trivia from '../assets/photos/24-25/trivia.webp';
+import picnic from '../assets/photos/24-25/picnic.webp';
+import westmarchesfinal from '../assets/photos/24-25/westmarchesfinal.jpg';
+import fridaynight from '../assets/photos/24-25/fridaynight.webp';
+import morepicnic from '../assets/photos/24-25/morepicnic.webp';
 ---
 
 <html lang="en">
@@ -44,9 +53,9 @@ import Footer from '../components/Footer.astro';
             <!-- Main Image Display -->
             <div class="main-image-container">
               <div class="main-image-wrapper">
-                <img
+                <Image
                   id="main-image"
-                  src="/src/assets/photos/24-25/enigmatable.webp"
+                  src={enigmatable}
                   alt="Enigma members at their regular game table"
                   class="main-image"
                 />
@@ -60,37 +69,37 @@ import Footer from '../components/Footer.astro';
             <!-- Thumbnail Strip -->
             <div class="thumbnail-strip">
               <div class="thumbnail-container" id="thumbnail-container">
-                <img src="/src/assets/photos/24-25/enigmatable.webp"
+                <Image src={enigmatable}
                      alt="Enigma members at their regular game table"
                      class="thumbnail active"
                      data-index="0" />
 
-                <img src="/src/assets/photos/24-25/someevent.webp"
+                <Image src={someevent}
                      alt="Enigma members at a special event"
                      class="thumbnail"
                      data-index="1" />
 
-                <img src="/src/assets/photos/24-25/trivia.webp"
+                <Image src={trivia}
                      alt="Enigma trivia night"
                      class="thumbnail"
                      data-index="2" />
 
-                <img src="/src/assets/photos/24-25/picnic.webp"
+                <Image src={picnic}
                      alt="Enigma picnic event"
                      class="thumbnail"
                      data-index="3" />
 
-                <img src="/src/assets/photos/24-25/westmarchesfinal.jpg"
+                <Image src={westmarchesfinal}
                      alt="West Marches campaign final session"
                      class="thumbnail"
                      data-index="4" />
 
-                <img src="/src/assets/photos/24-25/fridaynight.webp"
+                <Image src={fridaynight}
                      alt="Enigma Friday night gaming session"
                      class="thumbnail"
                      data-index="5" />
 
-                <img src="/src/assets/photos/24-25/morepicnic.webp"
+                <Image src={morepicnic}
                      alt="Enigma members at another picnic event"
                      class="thumbnail"
                      data-index="6" />
