@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -11,6 +11,31 @@ import picnic from '../assets/photos/24-25/picnic.webp';
 import westmarchesfinal from '../assets/photos/24-25/westmarchesfinal.jpg';
 import fridaynight from '../assets/photos/24-25/fridaynight.webp';
 import morepicnic from '../assets/photos/24-25/morepicnic.webp';
+
+const images = [
+  { src: enigmatable, alt: 'Enigma members at their regular game table' },
+  { src: someevent, alt: 'Enigma members at a special event' },
+  { src: trivia, alt: 'Enigma trivia night' },
+  { src: picnic, alt: 'Enigma picnic event' },
+  { src: westmarchesfinal, alt: 'West Marches campaign final session' },
+  { src: fridaynight, alt: 'Enigma Friday night gaming session' },
+  { src: morepicnic, alt: 'Enigma members at another picnic event' },
+];
+
+const galleryImages = await Promise.all(
+  images.map(async (image) => {
+    const optimizedImage = await getImage({
+      src: image.src,
+      width: 2000,
+      height: 1126,
+    });
+    return {
+      alt: image.alt,
+      src: optimizedImage.src,
+      srcset: optimizedImage.attributes.srcset,
+    };
+  })
+);
 ---
 
 <html lang="en">
@@ -52,9 +77,12 @@ import morepicnic from '../assets/photos/24-25/morepicnic.webp';
               <div class="main-image-wrapper">
                 <Image
                   id="main-image"
-                  src={enigmatable}
-                  alt="Enigma members at their regular game table"
+                  src={images[0].src}
+                  alt={images[0].alt}
                   class="main-image"
+                  width={2000}
+                  height={1126}
+                  sizes="(min-width: 1000px) 1000px, 100vw"
                 />
                 <div class="image-overlay"></div>
                 <button class="nav-arrow prev-arrow" id="prev-btn" aria-label="Previous image">❮</button>
@@ -66,42 +94,16 @@ import morepicnic from '../assets/photos/24-25/morepicnic.webp';
             <!-- Thumbnail Strip -->
             <div class="thumbnail-strip">
               <div class="thumbnail-container" id="thumbnail-container">
-                <Image src={enigmatable}
-                     alt="Enigma members at their regular game table"
-                     class="thumbnail active"
-                     data-index="0" />
-
-                <Image src={someevent}
-                     alt="Enigma members at a special event"
-                     class="thumbnail"
-                     data-index="1" />
-
-                <Image src={trivia}
-                     alt="Enigma trivia night"
-                     class="thumbnail"
-                     data-index="2" />
-
-                <Image src={picnic}
-                     alt="Enigma picnic event"
-                     class="thumbnail"
-                     data-index="3" />
-
-                <Image src={westmarchesfinal}
-                     alt="West Marches campaign final session"
-                     class="thumbnail"
-                     data-index="4" />
-
-                <Image src={fridaynight}
-                     alt="Enigma Friday night gaming session"
-                     class="thumbnail"
-                     data-index="5" />
-
-                <Image src={morepicnic}
-                     alt="Enigma members at another picnic event"
-                     class="thumbnail"
-                     data-index="6" />
-
-
+                {images.map((image, index) => (
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    class:list={["thumbnail", { active: index === 0 }]}
+                    width={120}
+                    height={80}
+                    data-index={index}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -377,20 +379,28 @@ import morepicnic from '../assets/photos/24-25/morepicnic.webp';
   }
 </style>
 
-<script>
+<script define:vars={{ galleryImages }}>
   document.addEventListener('DOMContentLoaded', () => {
-    const mainImage = document.getElementById('main-image') as HTMLImageElement;
-    const thumbnails = document.querySelectorAll('.thumbnail') as NodeListOf<HTMLImageElement>;
-    const prevBtn = document.getElementById('prev-btn') as HTMLButtonElement;
-    const nextBtn = document.getElementById('next-btn') as HTMLButtonElement;
+    const mainImageWrapper = document.querySelector('.main-image-wrapper');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
 
     let currentIndex = 0;
 
-    function updateMainImage(index: number) {
-      const thumbnail = thumbnails[index];
-      mainImage.src = thumbnail.src;
-      mainImage.alt = thumbnail.alt;
-
+    function updateMainImage(index) {
+      const newImage = galleryImages[index];
+      
+      // Find the existing image element and update it instead of recreating everything
+      const existingImg = mainImageWrapper.querySelector('#main-image');
+      if (existingImg) {
+        existingImg.src = newImage.src;
+        existingImg.alt = newImage.alt;
+        if (newImage.srcset) {
+          existingImg.srcset = newImage.srcset;
+        }
+      }
+      
       // Update active thumbnail
       thumbnails.forEach((thumb, i) => {
         thumb.classList.toggle('active', i === index);
@@ -408,21 +418,23 @@ import morepicnic from '../assets/photos/24-25/morepicnic.webp';
 
     // Navigation button handlers
     prevBtn.addEventListener('click', () => {
-      const newIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+      const newIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
       updateMainImage(newIndex);
     });
 
     nextBtn.addEventListener('click', () => {
-      const newIndex = (currentIndex + 1) % thumbnails.length;
+      const newIndex = (currentIndex + 1) % galleryImages.length;
       updateMainImage(newIndex);
     });
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') {
-        prevBtn.click();
+        const newIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+        updateMainImage(newIndex);
       } else if (e.key === 'ArrowRight') {
-        nextBtn.click();
+        const newIndex = (currentIndex + 1) % galleryImages.length;
+        updateMainImage(newIndex);
       }
     });
   });

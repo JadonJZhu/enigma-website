@@ -29,8 +29,8 @@ async function getOfficerImage(name: string) {
   const imagePath = `../assets/officers/${imageName}.JPG`;
   
   if (officerImages[imagePath]) {
-    const imageModule = await officerImages[imagePath]() as { default: { src: string } };
-    return imageModule.default.src;
+    const imageModule = await officerImages[imagePath]();
+    return imageModule.default;
   }
   
   return null; // or a default image path
@@ -104,10 +104,12 @@ async function getOfficerImage(name: string) {
                 <div class="officer-avatar">
                   <div class={`avatar-container ${officer.name.toLowerCase().replace(/\s+/g, '')}`}>
                     {imageSrc ? (
-                      <img
+                      <Image
                         src={imageSrc}
                         alt={`${officer.name} profile photo`}
                         class="officer-image"
+                        width={120}
+                        height={120}
                       />
                     ) : (
                       <div class="avatar-placeholder">
