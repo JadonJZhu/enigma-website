@@ -103,30 +103,30 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
               See Upcoming Events
             </a>
           </div>
-        </div>
-        <!-- Upcoming Event Card -->
-        {upcomingEvent && (
-          <div class="upcoming-event-card">
-            <div class="upcoming-event-badge">UPCOMING EVENT</div>
-            <div class="upcoming-event-content">
-              <div class="upcoming-event-date">
-                <span class="upcoming-event-date-day">{parseCSVDate(upcomingEvent.startTime)?.getDate()}</span>
-                <span class="upcoming-event-date-month">{parseCSVDate(upcomingEvent.startTime)?.toLocaleDateString('en-US', { month: 'short' })}</span>
-                <span class="upcoming-event-date-year">{parseCSVDate(upcomingEvent.startTime)?.getFullYear()}</span>
-              </div>
-              <div class="upcoming-event-details">
-                <h3 class="upcoming-event-title">{upcomingEvent.name}</h3>
-                <div class="upcoming-event-meta">
-                  <span class="upcoming-event-time">🕐 {parseCSVDate(upcomingEvent.startTime)?.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} - {parseCSVDate(upcomingEvent.endTime)?.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
-                  <span class="upcoming-event-location">📍 {upcomingEvent.location || 'To be decided'}</span>
+          <!-- Upcoming Event Card -->
+          {upcomingEvent && (
+            <div class="upcoming-event-card">
+              <div class="upcoming-event-badge">UPCOMING EVENT</div>
+              <div class="upcoming-event-content">
+                <div class="upcoming-event-date">
+                  <span class="upcoming-event-date-day">{parseCSVDate(upcomingEvent.startTime)?.getDate()}</span>
+                  <span class="upcoming-event-date-month">{parseCSVDate(upcomingEvent.startTime)?.toLocaleDateString('en-US', { month: 'short' })}</span>
+                  <span class="upcoming-event-date-year">{parseCSVDate(upcomingEvent.startTime)?.getFullYear()}</span>
                 </div>
-                <p class="upcoming-event-description">
-                  {upcomingEvent.description || `Join us for this exciting ${upcomingEvent.name.toLowerCase()}!`}
-                </p>
+                <div class="upcoming-event-details">
+                  <h3 class="upcoming-event-title">{upcomingEvent.name}</h3>
+                  <div class="upcoming-event-meta">
+                    <span class="upcoming-event-time">🕐 {parseCSVDate(upcomingEvent.startTime)?.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} - {parseCSVDate(upcomingEvent.endTime)?.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
+                    <span class="upcoming-event-location">📍 {upcomingEvent.location || 'To be decided'}</span>
+                  </div>
+                  <p class="upcoming-event-description">
+                    {upcomingEvent.description || `Join us for this exciting ${upcomingEvent.name.toLowerCase()}!`}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </section>
     </main>
 
@@ -290,8 +290,8 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
 
   /* Upcoming Event Card */
   .upcoming-event-card {
-    position: absolute;
-    bottom: 9rem;
+    position: relative;
+    margin-top: 5rem;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 20px;
@@ -300,14 +300,9 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
     border: 1px solid rgba(255, 255, 255, 0.2);
     max-width: 600px;
     z-index: 3;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-
-  .hero:hover .upcoming-event-card {
     opacity: 1;
     visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
   }
 
   .upcoming-event-badge {
@@ -405,16 +400,16 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
     .upcoming-event-card {
       max-width: 450px;
       padding: 1rem;
-      bottom: 4rem;
+      margin-top: 2.5rem;
     }
   }
 
   @media (max-width: 768px) {
     .upcoming-event-card {
       max-width: 100%;
-      width: calc(100% - 2rem);
+      width: 100%;
       padding: 1.2rem;
-      bottom: 3rem;
+      margin-top: 2.5rem;
     }
 
     .upcoming-event-content {
@@ -441,8 +436,8 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
   @media (max-width: 480px) {
     .upcoming-event-card {
       padding: 1rem;
-      width: calc(100% - 1rem);
-      bottom: 2.5rem;
+      width: 100%;
+      margin-top: 1.2rem;
     }
 
     .upcoming-event-badge {
