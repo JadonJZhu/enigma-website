@@ -454,4 +454,11 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
       font-size: 0.85rem;
     }
   }
+
+  /* Hide upcoming event card on small devices */
+  @media (max-width: 768px) {
+    .upcoming-event-card {
+      display: none;
+    }
+  }
 </style>
