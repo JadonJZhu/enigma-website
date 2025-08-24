@@ -134,6 +134,23 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
   </body>
 </html>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const mainElement = document.querySelector('main');
+    const upcomingEventCard = document.querySelector('.upcoming-event-card');
+
+    if (mainElement && upcomingEventCard) {
+      mainElement.addEventListener('mouseenter', function() {
+        upcomingEventCard.classList.add('show');
+      });
+
+      mainElement.addEventListener('mouseleave', function() {
+        upcomingEventCard.classList.remove('show');
+      });
+    }
+  });
+</script>
+
 <style>
   /* Hero Section Styles */
   .hero {
@@ -300,9 +317,14 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
     border: 1px solid rgba(255, 255, 255, 0.2);
     max-width: 600px;
     z-index: 3;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .upcoming-event-card.show {
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
   }
 
   .upcoming-event-badge {
