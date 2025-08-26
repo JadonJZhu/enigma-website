@@ -10,6 +10,13 @@
       </div>
     </div>
 
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" aria-label="Toggle mobile menu">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
     <nav class="navigation">
       <ul class="nav-list">
         <li class="nav-item">
@@ -33,7 +40,78 @@
       </ul>
     </nav>
   </div>
+
+  <!-- Mobile Navigation Overlay -->
+  <div class="mobile-nav-overlay">
+    <ul class="mobile-nav-list">
+      <li class="mobile-nav-item">
+        <a href="/" class="mobile-nav-link">Home</a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="/events" class="mobile-nav-link">Events</a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="/about-us" class="mobile-nav-link">About Us</a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="/photos" class="mobile-nav-link">Photos</a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="/faq" class="mobile-nav-link">FAQ</a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="/enigmaversary" class="mobile-nav-link mobile-enigmaversary-link">Enigmaversary</a>
+      </li>
+    </ul>
+  </div>
 </header>
+
+<script>
+  // Mobile menu functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const mobileNavOverlay = document.querySelector('.mobile-nav-overlay');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+    if (mobileMenuBtn && mobileNavOverlay) {
+      // Toggle mobile menu
+      mobileMenuBtn.addEventListener('click', function() {
+        mobileMenuBtn.classList.toggle('active');
+        mobileNavOverlay.classList.toggle('active');
+
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = mobileNavOverlay.classList.contains('active') ? 'hidden' : '';
+      });
+
+      // Close mobile menu when clicking on a link
+      mobileNavLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          mobileMenuBtn.classList.remove('active');
+          mobileNavOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+
+      // Close mobile menu when clicking outside
+      mobileNavOverlay.addEventListener('click', function(e) {
+        if (e.target === mobileNavOverlay) {
+          mobileMenuBtn.classList.remove('active');
+          mobileNavOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+
+      // Close mobile menu on escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mobileNavOverlay.classList.contains('active')) {
+          mobileMenuBtn.classList.remove('active');
+          mobileNavOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+  });
+</script>
 
 <style>
   .header {
@@ -83,6 +161,50 @@
 
   .navigation {
     flex-shrink: 0;
+  }
+
+  /* Mobile Menu Button */
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .mobile-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-menu-btn:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+  }
+
+  .hamburger-line {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: white;
+    margin: 4px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+  }
+
+  /* Mobile menu active state */
+  .mobile-menu-btn.active .hamburger-line:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+  }
+
+  .mobile-menu-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-btn.active .hamburger-line:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
   }
 
   .nav-list {
@@ -146,6 +268,83 @@
     100% { box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6); }
   }
 
+  /* Mobile Navigation Overlay */
+  .mobile-nav-overlay {
+    position: fixed;
+    top: 4rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 2rem;
+  }
+
+  .mobile-nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-nav-list {
+    background: var(--primary-color);
+    border-radius: 12px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 300px;
+    list-style: none;
+    margin: 0;
+    border: 2px solid transparent;
+    border-image: var(--rainbow-gradient) 1;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .mobile-nav-item {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .mobile-nav-link {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--secondary-color);
+    transform: translateY(-2px);
+  }
+
+  .mobile-enigmaversary-link {
+    background: linear-gradient(135deg, #FFD700, #FFA500, #FF8C00) !important;
+    color: #8B4513 !important;
+    font-weight: 800 !important;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    border: 2px solid #FFD700;
+    margin-top: 1rem;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  .mobile-enigmaversary-link:hover {
+    background: linear-gradient(135deg, #FFA500, #FF8C00, #FF6347) !important;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6);
+  }
+
   /* Responsive design */
   @media (max-width: 768px) {
     .header-container {
@@ -154,7 +353,7 @@
     }
 
     .logo-placeholder {
-      width: 150px;
+      width: 180px;
       height: 35px;
     }
 
@@ -162,33 +361,48 @@
       font-size: 1rem;
     }
 
-    .nav-list {
-      gap: 1rem;
+    /* Hide desktop navigation on mobile */
+    .navigation {
+      display: none;
     }
 
-    .nav-link {
-      font-size: 0.9rem;
-      padding: 0.4rem 0.8rem;
+    /* Show mobile menu button */
+    .mobile-menu-btn {
+      display: block;
+    }
+
+    /* Adjust header height for mobile */
+    .header {
+      height: 3.5rem;
     }
   }
 
   @media (max-width: 480px) {
-    .nav-list {
-      gap: 0.5rem;
+    .header-container {
+      height: 3rem;
     }
 
-    .nav-link {
-      font-size: 0.85rem;
-      padding: 0.3rem 0.6rem;
+    .mobile-nav-overlay {
+      top: 3rem;
     }
 
-    .enigmaversary-link {
-      font-size: 0.8rem !important;
-      padding: 0.4rem 0.7rem !important;
+    .logo-placeholder {
+      width: 200px;
+      height: 30px;
     }
 
-    .enigmaversary-link::before {
-      display: none; /* Hide emoji on mobile for space */
+    .logo-text {
+      font-size: 0.9rem;
+    }
+
+    .mobile-nav-list {
+      padding: 1.5rem;
+      width: 95%;
+    }
+
+    .mobile-nav-link {
+      font-size: 1.1rem;
+      padding: 0.8rem;
     }
   }
 </style>
