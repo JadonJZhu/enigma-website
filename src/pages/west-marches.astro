@@ -1,0 +1,473 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>West Marches - Enigma at UCLA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Raleway&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <Header />
+
+    <main class="main-content">
+      <!-- Page Header -->
+      <section class="page-header">
+        <div class="container">
+          <h1 class="page-title">West Marches</h1>
+          <p class="page-subtitle">Join our <a href="https://discord.gg/pjXTak7N89" target="_blank" class="discord-link">West Marches Discord</a> for the most up-to-date information!</p>
+        </div>
+      </section>
+
+      <!-- Introduction Section -->
+      <section class="intro-section">
+        <div class="container">
+          <div class="intro-content">
+            <p class="intro-text">
+              West Marches is a style of D&D 5e campaign focused on exploration, discovery, and treasure motivated by the players. Flexible commitment. All experience levels welcome.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- How It Works Section -->
+      <section class="how-it-works-section">
+        <div class="container">
+          <h2 class="section-title" style="text-align: center;">How Does a West Marches Campaign Work?</h2>
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">🎲</div>
+              <h3 class="feature-title">Player-Driven Missions</h3>
+              <p class="feature-description">
+                You will have a character in the campaign setting that can join missions and help develop the world around them. The "missions" will be either individual one-shots or potentially a series of sessions related to a certain plot point.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">🗺️</div>
+              <h3 class="feature-title">Exploration & Discovery</h3>
+              <p class="feature-description">
+                In theory, these sessions will be motivated by the players who are curious about the world around them. Do you want to discover more about a certain area? Help a neighbor retrieve a lost object? Delve deeper into a dungeon? Fight a monster that you were too weak to defeat before?
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">⏰</div>
+              <h3 class="feature-title">Flexible Scheduling</h3>
+              <p class="feature-description">
+                One of the many appealing characteristics of being a player in a West Marches campaign is the fact that you can be as active or as inactive as you want! Instead of having a consistent time of the week that you have to set aside for a session, you can choose to join missions that fit into your schedule.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">👥</div>
+              <h3 class="feature-title">Dynamic Party Composition</h3>
+              <p class="feature-description">
+                Another notable advantage of a West Marches campaign is that instead of being permanently tied to a particular party, each character is free to team up with any other arrangement of allies as they please! Players are encouraged to try out combinations of different characters working together, as well as playing with different DMs.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Character Creation Section -->
+      <section class="character-creation-section">
+        <div class="container">
+          <div class="character-content">
+            <h2 class="section-title">All Skill Levels Welcome</h2>
+            <p class="character-description">
+              Whether you're a seasoned adventurer with years of tabletop experience or just picking up your first character sheet, you're welcome to join our West Marches campaign! We'll provide a detailed guide for character creation once we begin the planning process, and our experienced players and DMs are always ready to help newcomers get started. No matter your skill level, you'll find a welcoming community ready to help you create your character and enjoy the adventure.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Call to Action -->
+      <section class="cta-section">
+        <div class="container">
+          <div class="cta-content">
+            <h2 class="cta-title">Ready to Join the Adventure?</h2>
+            <p class="cta-text">
+              Connect with us on the West Marches Discord to learn more about upcoming missions and get involved in our campaign!
+            </p>
+            <a href="https://discord.gg/pjXTak7N89" target="_blank" class="cta-button">
+              Join West Marches Discord
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  /* Main Content Background */
+  .main-content {
+    background: linear-gradient(135deg,
+      rgba(44, 24, 16, 0.8) 0%,
+      rgba(139, 26, 26, 0.8) 20%,
+      rgba(160, 50, 50, 0.8) 40%,
+      rgba(196, 59, 59, 0.8) 60%,
+      rgba(220, 76, 76, 0.8) 80%,
+      rgba(160, 50, 50, 0.8) 100%
+    ),
+    url('../assets/west-marches-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* Page Header */
+  .page-header {
+    color: #FFD700;
+    padding: 4rem 0 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 69, 0, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .page-title {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .page-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    font-family: 'Raleway', sans-serif;
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+    color: #E6E6FA;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Introduction Section */
+  .intro-section {
+    padding: 4rem 0;
+    position: relative;
+  }
+
+  .intro-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .intro-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    color: #FFD700;
+    margin-bottom: 2rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .intro-text {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: #E6E6FA;
+    font-family: 'Raleway', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  /* How It Works Section */
+  .how-it-works-section {
+    padding: 4rem 0;
+    position: relative;
+  }
+
+  .how-it-works-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(255, 69, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .feature-card {
+    background: linear-gradient(135deg, rgba(42, 26, 26, 0.9) 0%, rgba(62, 22, 22, 0.9) 100%);
+    padding: 2.5rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(255, 215, 0, 0.3);
+    border-color: rgba(255, 215, 0, 0.5);
+  }
+
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .feature-title {
+    font-size: 1.5rem;
+    color: #FFD700;
+    margin-bottom: 1rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  .feature-description {
+    color: #E6E6FA;
+    line-height: 1.6;
+    font-size: 1rem;
+    font-family: 'Raleway', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Character Creation Section */
+  .character-creation-section {
+    color: #FFD700;
+    padding: 4rem 0;
+    position: relative;
+  }
+
+  .character-creation-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 60%),
+                radial-gradient(circle at 30% 80%, rgba(255, 69, 0, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .character-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .character-description {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    opacity: 0.95;
+    font-family: 'Raleway', sans-serif;
+    color: #E6E6FA;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Call to Action Section */
+  .cta-section {
+    padding: 4rem 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-title {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    color: #FFD700;
+    margin-bottom: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .cta-text {
+    font-size: 1.1rem;
+    color: #E6E6FA;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    font-family: 'Raleway', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #8B1A1A 0%, #601a0f 50%, #FFD700 100%);
+    color: #FFD700;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
+    color: #FFD700;
+    border-color: rgba(255, 215, 0, 0.8);
+  }
+
+  .discord-link {
+    color: #E6E6FA;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .discord-link:hover {
+    color: #FFD700;
+    text-decoration: underline;
+    text-shadow: 1px 1px 3px rgba(255, 215, 0, 0.5);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .page-header {
+      padding: 3rem 0 2rem;
+    }
+
+    .intro-section,
+    .how-it-works-section,
+    .character-creation-section,
+    .cta-section {
+      padding: 3rem 0;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      padding: 2rem;
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+    }
+
+    .feature-title {
+      font-size: 1.3rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-header {
+      padding: 2rem 0 1.5rem;
+    }
+
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .page-subtitle {
+      font-size: 1rem;
+    }
+
+    .intro-section,
+    .how-it-works-section,
+    .character-creation-section,
+    .cta-section {
+      padding: 2rem 0;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    .intro-text,
+    .character-description {
+      font-size: 1rem;
+    }
+
+    .feature-card {
+      padding: 1.5rem;
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+    }
+
+    .feature-title {
+      font-size: 1.2rem;
+    }
+
+    .cta-title {
+      font-size: 1.5rem;
+    }
+
+    .cta-text {
+      font-size: 1rem;
+    }
+
+    .cta-button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+    }
+  }
+</style>
+
