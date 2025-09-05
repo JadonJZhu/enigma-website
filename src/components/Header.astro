@@ -6,7 +6,7 @@
   <div class="header-container">
     <div class="logo">
       <div class="logo-placeholder">
-        <span class="logo-text">ENIGMA at UCLA</span>
+        <a href="/" class="logo-text logo-link">ENIGMA at UCLA</a>
       </div>
     </div>
 
@@ -20,16 +20,10 @@
     <nav class="navigation">
       <ul class="nav-list">
         <li class="nav-item">
-          <a href="/" class="nav-link">Home</a>
-        </li>
-        <li class="nav-item">
           <a href="/events" class="nav-link">Events</a>
         </li>
         <li class="nav-item">
           <a href="/about-us" class="nav-link">About Us</a>
-        </li>
-        <li class="nav-item">
-          <a href="/photos" class="nav-link">Photos</a>
         </li>
         <li class="nav-item">
           <a href="/faq" class="nav-link">FAQ</a>
@@ -48,16 +42,10 @@
   <div class="mobile-nav-overlay">
     <ul class="mobile-nav-list">
       <li class="mobile-nav-item">
-        <a href="/" class="mobile-nav-link">Home</a>
-      </li>
-      <li class="mobile-nav-item">
         <a href="/events" class="mobile-nav-link">Events</a>
       </li>
       <li class="mobile-nav-item">
         <a href="/about-us" class="mobile-nav-link">About Us</a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="/photos" class="mobile-nav-link">Photos</a>
       </li>
       <li class="mobile-nav-item">
         <a href="/faq" class="mobile-nav-link">FAQ</a>
@@ -163,6 +151,25 @@
     font-weight: 700;
     font-size: 1.2rem;
     letter-spacing: 1px;
+  }
+
+  .logo-link {
+    text-decoration: none;
+    color: white;
+    display: block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .logo-link:hover {
+    color: var(--secondary-color);
+    transform: scale(1.05);
+  }
+
+  .logo-link:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 
   .navigation {

@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -9,8 +9,42 @@ import officersGroup from '../assets/officers/officers.JPG';
 import fs from 'fs';
 import path from 'path';
 
+// Import photos for gallery
+import enigmatable from '../assets/photos/24-25/enigmatable.webp';
+import someevent from '../assets/photos/24-25/someevent.webp';
+import trivia from '../assets/photos/24-25/trivia.webp';
+import picnic from '../assets/photos/24-25/picnic.webp';
+import westmarchesfinal from '../assets/photos/24-25/westmarchesfinal.jpg';
+import fridaynight from '../assets/photos/24-25/fridaynight.webp';
+import morepicnic from '../assets/photos/24-25/morepicnic.webp';
+
 // Import all officer images
 const officerImages = import.meta.glob('../assets/officers/*.JPG');
+
+const images = [
+  { src: enigmatable, alt: 'Enigma members at their regular game table' },
+  { src: someevent, alt: 'Enigma members at a special event' },
+  { src: trivia, alt: 'Enigma trivia night' },
+  { src: picnic, alt: 'Enigma picnic event' },
+  { src: westmarchesfinal, alt: 'West Marches campaign final session' },
+  { src: fridaynight, alt: 'Enigma Friday night gaming session' },
+  { src: morepicnic, alt: 'Enigma members at another picnic event' },
+];
+
+const galleryImages = await Promise.all(
+  images.map(async (image) => {
+    const optimizedImage = await getImage({
+      src: image.src,
+      width: 2000,
+      height: 1126,
+    });
+    return {
+      alt: image.alt,
+      src: optimizedImage.src,
+      srcset: optimizedImage.attributes.srcset,
+    };
+  })
+);
 
 const csvPath = path.resolve('./src/data/officers-master-list.csv');
 const csvContent = fs.readFileSync(csvPath, 'utf-8');
@@ -29,7 +63,7 @@ async function getOfficerImage(name: string) {
   const imagePath = `../assets/officers/${imageName}.JPG`;
   
   if (officerImages[imagePath]) {
-    const imageModule = await officerImages[imagePath]();
+    const imageModule = await officerImages[imagePath]() as any;
     return imageModule.default;
   }
   
@@ -127,6 +161,75 @@ async function getOfficerImage(name: string) {
                 </div>
               </div>
             )})}
+          </div>
+        </div>
+      </section>
+
+      <!-- Photos Section -->
+      <section class="photos-section">
+        <div class="container">
+          <h2 class="section-title">Photos</h2>
+          <p class="photos-subtitle">Capturing our memories</p>
+
+          <!-- Gallery Section -->
+          <div class="gallery-section">
+            <!-- Filter Controls -->
+            <div class="gallery-controls">
+              <label for="campaign-select" class="filter-label">Year:</label>
+              <select id="campaign-select" class="filter-dropdown">
+                <option value="2024-2025">2024-2025</option>
+              </select>
+            </div>
+
+            <!-- Main Gallery Display -->
+            <div class="gallery-container">
+              <!-- Main Image Display -->
+              <div class="main-image-container">
+                <div class="main-image-wrapper">
+                  <Image
+                    id="main-image"
+                    src={images[0].src}
+                    alt={images[0].alt}
+                    class="main-image"
+                    width={2000}
+                    height={1126}
+                    sizes="(min-width: 1000px) 1000px, 100vw"
+                  />
+                  <div class="image-overlay"></div>
+                  <button class="nav-arrow prev-arrow" id="prev-btn" aria-label="Previous image">❮</button>
+                  <button class="nav-arrow next-arrow" id="next-btn" aria-label="Next image">❯</button>
+                </div>
+
+              </div>
+
+              <!-- Thumbnail Strip -->
+              <div class="thumbnail-strip">
+                <div class="thumbnail-container" id="thumbnail-container">
+                  {images.map((image, index) => (
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      class:list={["thumbnail", { active: index === 0 }]}
+                      width={120}
+                      height={80}
+                      data-index={index}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <!-- Gallery Info -->
+            <div class="gallery-info">
+              <div class="info-box">
+                <h3 class="info-title">📸 Capture the Moment</h3>
+                <p class="info-text">
+                  Want to see your club photos featured here? Tag us on social media or send your
+                  best moments to an officer. We'd love to showcase the fun and
+                  community that makes Enigma special!
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -389,4 +492,295 @@ async function getOfficerImage(name: string) {
       font-size: 2rem;
     }
   }
+
+  /* Photos Section */
+  .photos-section {
+    background: var(--background-color);
+    padding: 4rem 0;
+  }
+
+  .photos-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    font-family: 'Raleway', sans-serif;
+    opacity: 0.9;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #666;
+  }
+
+  /* Gallery Section */
+  .gallery-controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .filter-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: var(--text-color);
+    font-size: 1.1rem;
+    margin-right: 1rem;
+    align-self: center;
+  }
+
+  .filter-dropdown {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    background: white;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .filter-dropdown:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.2);
+  }
+
+  /* Main Gallery */
+  .gallery-container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .main-image-container {
+    margin-bottom: 2rem;
+  }
+
+  .main-image-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 3px solid var(--secondary-color);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .main-image {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0) 100%);
+    pointer-events: none;
+  }
+
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(155, 89, 182, 0.9);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  .nav-arrow:hover {
+    background: var(--primary-color);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .prev-arrow {
+    left: 20px;
+  }
+
+  .next-arrow {
+    right: 20px;
+  }
+
+  /* Thumbnail Strip */
+  .thumbnail-strip {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+
+  .thumbnail-container {
+    display: flex;
+    gap: 1rem;
+    padding: 0 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .thumbnail {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    opacity: 0.7;
+  }
+
+  .thumbnail:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .thumbnail.active {
+    opacity: 1;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.3);
+  }
+
+  /* Gallery Info */
+  .gallery-info {
+    margin-top: 4rem;
+    text-align: center;
+  }
+
+  .info-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .info-title {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+  }
+
+  .info-text {
+    color: #666;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .main-image {
+      height: 300px;
+    }
+
+    .nav-arrow {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .prev-arrow {
+      left: 10px;
+    }
+
+    .next-arrow {
+      right: 10px;
+    }
+
+    .thumbnail {
+      width: 100px;
+      height: 70px;
+    }
+
+    .filter-label {
+      font-size: 1rem;
+    }
+
+    .filter-dropdown {
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .main-image {
+      height: 250px;
+    }
+
+    .thumbnail-container {
+      gap: 0.5rem;
+      padding: 0 0.5rem;
+    }
+
+    .thumbnail {
+      width: 80px;
+      height: 60px;
+    }
+  }
 </style>
+
+<script define:vars={{ galleryImages }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mainImageWrapper = document.querySelector('.main-image-wrapper');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+
+    let currentIndex = 0;
+
+    function updateMainImage(index) {
+      const newImage = galleryImages[index];
+
+      // Find the existing image element and update it instead of recreating everything
+      const existingImg = mainImageWrapper.querySelector('#main-image');
+      if (existingImg) {
+        existingImg.src = newImage.src;
+        existingImg.alt = newImage.alt;
+        if (newImage.srcset) {
+          existingImg.srcset = newImage.srcset;
+        }
+      }
+
+      // Update active thumbnail
+      thumbnails.forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
+
+      currentIndex = index;
+    }
+
+    // Thumbnail click handlers
+    thumbnails.forEach((thumbnail, index) => {
+      thumbnail.addEventListener('click', () => {
+        updateMainImage(index);
+      });
+    });
+
+    // Navigation button handlers
+    prevBtn.addEventListener('click', () => {
+      const newIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+      updateMainImage(newIndex);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const newIndex = (currentIndex + 1) % galleryImages.length;
+      updateMainImage(newIndex);
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        const newIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+        updateMainImage(newIndex);
+      } else if (e.key === 'ArrowRight') {
+        const newIndex = (currentIndex + 1) % galleryImages.length;
+        updateMainImage(newIndex);
+      }
+    });
+  });
+</script>
