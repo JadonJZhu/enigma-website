@@ -699,12 +699,6 @@ async function getOfficerImage(name: string) {
     .officer-hover-overlay {
       padding: 1.5rem;
       max-width: 90vw;
-      /* Ensure proper centering on mobile */
-      position: fixed !important;
-      top: 50vh !important;
-      left: 50vw !important;
-      transform: translate(-50%, -50%) !important;
-      margin: 0 !important;
     }
 
     .hover-content h4 {
@@ -775,12 +769,6 @@ async function getOfficerImage(name: string) {
     .officer-hover-overlay {
       padding: 1rem;
       max-width: 95vw;
-      /* Ensure proper centering on mobile */
-      position: fixed !important;
-      top: 50vh !important;
-      left: 50vw !important;
-      transform: translate(-50%, -50%) !important;
-      margin: 0 !important;
     }
 
     .hover-content h4 {
@@ -1117,15 +1105,6 @@ async function getOfficerImage(name: string) {
     function showPopup(card, popup) {
       // Hide any existing popup
       closePopup();
-
-      // Ensure popup is properly centered (especially on mobile)
-      if (isTouchDevice) {
-        popup.style.position = 'fixed';
-        popup.style.top = '50vh';
-        popup.style.left = '50vw';
-        popup.style.transform = 'translate(-50%, -50%)';
-        popup.style.margin = '0';
-      }
 
       // Show new popup and elevate card z-index
       popup.classList.add('show');
