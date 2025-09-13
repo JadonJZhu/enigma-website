@@ -589,24 +589,6 @@ async function getOfficerImage(name: string) {
     transform: scale(1.1);
   }
 
-  /* Mobile-specific styles for close button */
-  @media (max-width: 768px) {
-    .popup-close-btn {
-      width: 40px;
-      height: 40px;
-      font-size: 1.8rem;
-      top: 10px;
-      right: 10px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .popup-close-btn {
-      width: 45px;
-      height: 45px;
-      font-size: 2rem;
-    }
-  }
 
 
   .hover-content {
@@ -1101,14 +1083,10 @@ async function getOfficerImage(name: string) {
       }
     });
 
-    // Officer card popup functionality
+    // Officer card hover functionality
     const officerCards = document.querySelectorAll('.officer-card');
     let activePopup = null;
     let activeCard = null;
-
-    // Mobile detection
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-                     (window.innerWidth <= 768 && window.innerHeight <= 1024);
 
     function closePopup() {
       if (activePopup) {
@@ -1136,57 +1114,26 @@ async function getOfficerImage(name: string) {
       const popup = card.querySelector('.officer-hover-overlay');
       const closeBtn = popup.querySelector('.popup-close-btn');
 
-      if (isMobile) {
-        // Mobile: Use click/tap to show popup
-        card.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (!popup.classList.contains('show')) {
-            showPopup(card, popup);
-          }
-        });
 
-        // Close button for mobile
-        closeBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
+      card.addEventListener('mouseenter', () => {
+        showPopup(card, popup);
+      });
+
+      // Handle mouse leaving the card (but not the popup)
+      card.addEventListener('mouseleave', (e) => {
+        // Only hide if we're not moving to the popup
+        if (!popup.contains(e.relatedTarget)) {
           closePopup();
-        });
+        }
+      });
 
-        // Close on outside click for mobile
-        document.addEventListener('click', (e) => {
-          if (activePopup && !popup.contains(e.target) && !card.contains(e.target)) {
-            closePopup();
-          }
-        });
+      // Handle mouse leaving the popup
+      popup.addEventListener('mouseleave', () => {
+        closePopup();
+      });
 
-        // Close on escape key for mobile
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && activePopup) {
-            closePopup();
-          }
-        });
-
-      } else {
-        // Desktop: Use hover functionality
-        card.addEventListener('mouseenter', () => {
-          showPopup(card, popup);
-        });
-
-        // Handle mouse leaving the card (but not the popup)
-        card.addEventListener('mouseleave', (e) => {
-          // Only hide if we're not moving to the popup
-          if (!popup.contains(e.relatedTarget)) {
-            closePopup();
-          }
-        });
-
-        // Handle mouse leaving the popup
-        popup.addEventListener('mouseleave', () => {
-          closePopup();
-        });
-
-        // Hide close button on desktop (it's not needed for hover)
-        closeBtn.style.display = 'none';
-      }
+      // Hide close button (not needed for hover)
+      closeBtn.style.display = 'none';
     });
   });
 </script>
