@@ -197,6 +197,7 @@ async function getOfficerImage(name: string) {
                   <h4 class="officer-title">{officer.position}</h4>
                 </div>
                 <div class="officer-hover-overlay">
+                  <button class="popup-close-btn" aria-label="Close popup">×</button>
                   <div class="hover-content">
                     <h4>About {officer.name}</h4>
                     <div class="hover-details">
@@ -571,6 +572,52 @@ async function getOfficerImage(name: string) {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+  }
+
+  .popup-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10001;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .popup-close-btn:hover {
+    background: var(--secondary-color);
+    transform: scale(1.1);
+  }
+
+  /* Mobile-specific styles for close button */
+  @media (max-width: 768px) {
+    .popup-close-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 1.8rem;
+      top: 10px;
+      right: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .popup-close-btn {
+      width: 45px;
+      height: 45px;
+      font-size: 2rem;
+    }
   }
 
 
@@ -1071,46 +1118,87 @@ async function getOfficerImage(name: string) {
     let activePopup = null;
     let activeCard = null;
 
+    // Mobile detection
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                     (window.innerWidth <= 768 && window.innerHeight <= 1024);
+
+    function closePopup() {
+      if (activePopup) {
+        activePopup.classList.remove('show');
+        activePopup = null;
+      }
+      if (activeCard) {
+        activeCard.style.zIndex = '';
+        activeCard = null;
+      }
+    }
+
+    function showPopup(card, popup) {
+      // Hide any existing popup
+      closePopup();
+
+      // Show new popup and elevate card z-index
+      popup.classList.add('show');
+      card.style.zIndex = '10001'; // Higher than popup's 10000
+      activePopup = popup;
+      activeCard = card;
+    }
+
     officerCards.forEach(card => {
       const popup = card.querySelector('.officer-hover-overlay');
+      const closeBtn = popup.querySelector('.popup-close-btn');
 
-      card.addEventListener('mouseenter', () => {
-        // Hide any existing popup
-        if (activePopup) {
-          activePopup.classList.remove('show');
-        }
-        // Reset z-index of previously active card
-        if (activeCard) {
-          activeCard.style.zIndex = '';
-        }
+      if (isMobile) {
+        // Mobile: Use click/tap to show popup
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (!popup.classList.contains('show')) {
+            showPopup(card, popup);
+          }
+        });
 
-        // Show new popup and elevate card z-index
-        popup.classList.add('show');
-        card.style.zIndex = '10001'; // Higher than popup's 10000
-        activePopup = popup;
-        activeCard = card;
-      });
+        // Close button for mobile
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closePopup();
+        });
 
-      // Handle mouse leaving the card (but not the popup)
-      card.addEventListener('mouseleave', (e) => {
-        // Only hide if we're not moving to the popup
-        if (!popup.contains(e.relatedTarget)) {
-          popup.classList.remove('show');
-          card.style.zIndex = '';
-          activePopup = null;
-          activeCard = null;
-        }
-      });
+        // Close on outside click for mobile
+        document.addEventListener('click', (e) => {
+          if (activePopup && !popup.contains(e.target) && !card.contains(e.target)) {
+            closePopup();
+          }
+        });
 
-      // Handle mouse leaving the popup
-      popup.addEventListener('mouseleave', () => {
-        popup.classList.remove('show');
-        if (activeCard) {
-          activeCard.style.zIndex = '';
-          activeCard = null;
-        }
-        activePopup = null;
-      });
+        // Close on escape key for mobile
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && activePopup) {
+            closePopup();
+          }
+        });
+
+      } else {
+        // Desktop: Use hover functionality
+        card.addEventListener('mouseenter', () => {
+          showPopup(card, popup);
+        });
+
+        // Handle mouse leaving the card (but not the popup)
+        card.addEventListener('mouseleave', (e) => {
+          // Only hide if we're not moving to the popup
+          if (!popup.contains(e.relatedTarget)) {
+            closePopup();
+          }
+        });
+
+        // Handle mouse leaving the popup
+        popup.addEventListener('mouseleave', () => {
+          closePopup();
+        });
+
+        // Hide close button on desktop (it's not needed for hover)
+        closeBtn.style.display = 'none';
+      }
     });
   });
 </script>
