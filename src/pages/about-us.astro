@@ -1083,10 +1083,13 @@ async function getOfficerImage(name: string) {
       }
     });
 
-    // Officer card hover functionality
+    // Officer card hover/touch functionality
     const officerCards = document.querySelectorAll('.officer-card');
     let activePopup = null;
     let activeCard = null;
+
+    // Detect if device supports touch
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
     function closePopup() {
       if (activePopup) {
@@ -1110,30 +1113,68 @@ async function getOfficerImage(name: string) {
       activeCard = card;
     }
 
+    // Handle clicks outside popup to close it
+    function handleOutsideClick(e) {
+      if (activePopup && !activePopup.contains(e.target) && !activeCard.contains(e.target)) {
+        closePopup();
+      }
+    }
+
+    // Add outside click listener for mobile
+    document.addEventListener('click', handleOutsideClick);
+
     officerCards.forEach(card => {
       const popup = card.querySelector('.officer-hover-overlay');
       const closeBtn = popup.querySelector('.popup-close-btn');
 
+      if (isTouchDevice) {
+        // Mobile/Touch devices: Use click/tap to show popup
+        card.addEventListener('click', (e) => {
+          e.stopPropagation(); // Prevent outside click handler
+          if (activePopup === popup) {
+            // If clicking the same card that's already active, close it
+            closePopup();
+          } else {
+            showPopup(card, popup);
+          }
+        });
 
-      card.addEventListener('mouseenter', () => {
-        showPopup(card, popup);
-      });
+        // Show close button for mobile
+        closeBtn.style.display = 'flex';
 
-      // Handle mouse leaving the card (but not the popup)
-      card.addEventListener('mouseleave', (e) => {
-        // Only hide if we're not moving to the popup
-        if (!popup.contains(e.relatedTarget)) {
+        // Handle close button click
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
           closePopup();
-        }
-      });
+        });
 
-      // Handle mouse leaving the popup
-      popup.addEventListener('mouseleave', () => {
-        closePopup();
-      });
+        // Handle touch events for better mobile experience
+        card.addEventListener('touchstart', (e) => {
+          e.stopPropagation();
+        });
 
-      // Hide close button (not needed for hover)
-      closeBtn.style.display = 'none';
+      } else {
+        // Desktop: Use hover to show popup
+        card.addEventListener('mouseenter', () => {
+          showPopup(card, popup);
+        });
+
+        // Handle mouse leaving the card (but not the popup)
+        card.addEventListener('mouseleave', (e) => {
+          // Only hide if we're not moving to the popup
+          if (!popup.contains(e.relatedTarget)) {
+            closePopup();
+          }
+        });
+
+        // Handle mouse leaving the popup
+        popup.addEventListener('mouseleave', () => {
+          closePopup();
+        });
+
+        // Hide close button (not needed for hover)
+        closeBtn.style.display = 'none';
+      }
     });
   });
 </script>
