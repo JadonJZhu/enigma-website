@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import homeBackground from '../assets/home-background.png';
 import enigmaLogo from '../assets/enigma-logo.png';
+import websiteCoverPhoto from '../assets/website-cover-photo.png';
 import { getEventsByQuarterStatic, type EventData } from '../data/events';
 
 // Load events data
@@ -84,14 +85,14 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
     <meta property="og:url" content="https://enigma.ucla.edu/" />
     <meta property="og:title" content="Enigma at UCLA - Board Games, D&D, and More" />
     <meta property="og:description" content="Join Enigma, UCLA's premier club for board games, Dungeons & Dragons, sci-fi, fantasy, and more. New adventurers always welcome." />
-    <meta property="og:image" content={homeBackground.src} />
+    <meta property="og:image" content={websiteCoverPhoto.src} />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://enigma.ucla.edu/" />
     <meta property="twitter:title" content="Enigma at UCLA - Board Games, D&D, and More" />
     <meta property="twitter:description" content="Join Enigma, UCLA's premier club for board games, Dungeons & Dragons, sci-fi, fantasy, and more. New adventurers always welcome." />
-    <meta property="twitter:image" content={homeBackground.src} />
+    <meta property="twitter:image" content={websiteCoverPhoto.src} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
