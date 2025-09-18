@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import homeBackground from '../assets/home-background.png';
+import enigmaLogo from '../assets/enigma-logo.png';
 import { getEventsByQuarterStatic, type EventData } from '../data/events';
 
 // Load events data
@@ -104,6 +105,7 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
       <section class="hero" style={`background-image: url(${homeBackground.src})`}>
         <div class="hero-overlay"></div>
         <div class="hero-content">
+          <img src={enigmaLogo.src} alt="Enigma Logo" class="hero-logo" />
           <h1 class="hero-title">Your Next Quest Awaits.</h1>
           <p class="hero-subtitle">
             Join Enigma, UCLA's premier club for board games, Dungeons & Dragons, sci-fi, fantasy, and more. New adventurers always welcome.
@@ -119,31 +121,32 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
               See Upcoming Events
             </a>
           </div>
-          <!-- Upcoming Event Card -->
-          {upcomingEvent && (
-            <div class="upcoming-event-card">
-              <div class="upcoming-event-badge">UPCOMING EVENT</div>
-              <div class="upcoming-event-content">
-                <div class="upcoming-event-date">
-                  <span class="upcoming-event-date-day">{parseCSVDate(upcomingEvent.startTime)?.getDate()}</span>
-                  <span class="upcoming-event-date-month">{parseCSVDate(upcomingEvent.startTime)?.toLocaleDateString('en-US', { month: 'short' })}</span>
-                  <span class="upcoming-event-date-year">{parseCSVDate(upcomingEvent.startTime)?.getFullYear()}</span>
-                </div>
-                <div class="upcoming-event-details">
-                  <h3 class="upcoming-event-title">{upcomingEvent.name}</h3>
-                  <div class="upcoming-event-meta">
-                    <span class="upcoming-event-time">🕐 {parseCSVDate(upcomingEvent.startTime)?.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} - {parseCSVDate(upcomingEvent.endTime)?.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
-                    <span class="upcoming-event-location">📍 {upcomingEvent.location || 'To be decided'}</span>
-                  </div>
-                  <p class="upcoming-event-description">
-                    {upcomingEvent.description || `Join us for this exciting ${upcomingEvent.name.toLowerCase()}!`}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </section>
+
+      <!-- Upcoming Event Card -->
+      {upcomingEvent && (
+        <div class="upcoming-event-card">
+          <div class="upcoming-event-badge">UPCOMING EVENT</div>
+          <div class="upcoming-event-content">
+            <div class="upcoming-event-date">
+              <span class="upcoming-event-date-day">{parseCSVDate(upcomingEvent.startTime)?.getDate()}</span>
+              <span class="upcoming-event-date-month">{parseCSVDate(upcomingEvent.startTime)?.toLocaleDateString('en-US', { month: 'short' })}</span>
+              <span class="upcoming-event-date-year">{parseCSVDate(upcomingEvent.startTime)?.getFullYear()}</span>
+            </div>
+            <div class="upcoming-event-details">
+              <h3 class="upcoming-event-title">{upcomingEvent.name}</h3>
+              <div class="upcoming-event-meta">
+                <span class="upcoming-event-time">🕐 {parseCSVDate(upcomingEvent.startTime)?.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })} - {parseCSVDate(upcomingEvent.endTime)?.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
+                <span class="upcoming-event-location">📍 {upcomingEvent.location || 'To be decided'}</span>
+              </div>
+              <p class="upcoming-event-description">
+                {upcomingEvent.description || `Join us for this exciting ${upcomingEvent.name.toLowerCase()}!`}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
 
     <Footer />
@@ -203,6 +206,16 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
     align-items: center;
     justify-content: center;
     color: var(--text-color);
+    transform: translateY(-10%);
+  }
+
+  .hero-logo {
+    width: clamp(200px, 26vw, 320px);
+    height: auto;
+    margin-bottom: 1rem;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.7));
+    opacity: 1;
+    transform: translateX(-5%)
   }
 
   .hero-title {
@@ -301,6 +314,11 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
       padding: 0 1rem;
     }
 
+    .hero-logo {
+      width: clamp(100px, 25vw, 150px);
+      margin-bottom: 0.8rem;
+    }
+
     .hero-title {
       font-size: 2.2rem;
     }
@@ -323,16 +341,18 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
 
   /* Upcoming Event Card */
   .upcoming-event-card {
-    position: relative;
-    margin-top: 5rem;
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     padding: 1rem;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 15px 35px rgba(46, 41, 41, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    max-width: 600px;
-    z-index: 3;
+    max-width: 400px;
+    z-index: 1000;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -435,69 +455,77 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
   }
 
   /* Responsive adjustments for upcoming event card */
+  @media (max-width: 1200px) {
+    .upcoming-event-card {
+      max-width: 350px;
+      right: 1.5rem;
+    }
+  }
+
   @media (max-width: 1024px) {
     .upcoming-event-card {
-      max-width: 450px;
-      padding: 1rem;
-      margin-top: 2.5rem;
+      max-width: 320px;
+      right: 1rem;
+      padding: 0.9rem;
     }
   }
 
   @media (max-width: 768px) {
     .upcoming-event-card {
-      max-width: 100%;
-      width: 100%;
-      padding: 1.2rem;
-      margin-top: 2.5rem;
+      max-width: 280px;
+      right: 0.8rem;
+      padding: 0.8rem;
     }
 
     .upcoming-event-content {
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 0.6rem;
       text-align: center;
     }
 
     .upcoming-event-date {
       align-self: center;
       min-width: auto;
-      padding: 0.8rem 1rem;
-    }
-
-    .upcoming-event-title {
-      font-size: 1.2rem;
-    }
-
-    .upcoming-event-meta {
-      align-items: center;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .upcoming-event-card {
-      padding: 1rem;
-      width: 100%;
-      margin-top: 1.2rem;
-    }
-
-    .upcoming-event-badge {
-      padding: 0.3rem 0.8rem;
-      font-size: 0.7rem;
-      margin-bottom: 0.8rem;
+      padding: 0.6rem 0.8rem;
     }
 
     .upcoming-event-title {
       font-size: 1.1rem;
     }
 
-    .upcoming-event-description {
-      font-size: 0.85rem;
+    .upcoming-event-meta {
+      align-items: center;
+      font-size: 0.8rem;
     }
   }
 
-  /* Hide upcoming event card on small devices */
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     .upcoming-event-card {
-      display: none;
+      max-width: 250px;
+      right: 0.5rem;
+      padding: 0.7rem;
+    }
+
+    .upcoming-event-badge {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.65rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .upcoming-event-title {
+      font-size: 1rem;
+    }
+
+    .upcoming-event-description {
+      font-size: 0.8rem;
+    }
+
+    .upcoming-event-date-day {
+      font-size: 1.5rem;
+    }
+
+    .upcoming-event-date-month {
+      font-size: 0.8rem;
     }
   }
 </style>

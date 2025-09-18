@@ -1,5 +1,6 @@
 ---
 // Footer component for Enigma website
+import enigmaLogo from '../assets/enigma-logo.png';
 ---
 
 <footer class="footer">
@@ -8,8 +9,9 @@
       <!-- Column 1: Logo and Tagline -->
       <div class="footer-column">
         <div class="footer-logo">
-          <div class="logo-placeholder">
+          <div class="logo-content">
             <span class="logo-text">ENIGMA at UCLA</span>
+            <img src={enigmaLogo.src} alt="Enigma at UCLA Logo" class="logo-image" />
           </div>
         </div>
       </div>
@@ -85,15 +87,22 @@
     margin-bottom: 1rem;
   }
 
-  .logo-placeholder {
-    width: 200px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
+  .logo-content {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .logo-image {
+    width: 120px;
+    height: auto;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+  }
+
+  .logo-image:hover {
+    opacity: 1;
   }
 
   .logo-text {
@@ -210,9 +219,8 @@
       margin-bottom: 0.75rem;
     }
 
-    .logo-placeholder {
-      width: 180px;
-      height: 35px;
+    .logo-image {
+      width: 100px;
     }
 
     .logo-text {
@@ -234,9 +242,12 @@
       padding: 1.5rem 0 1rem 0;
     }
 
-    .logo-placeholder {
-      width: 200px;
-      height: 30px;
+    .logo-image {
+      width: 90px;
+    }
+
+    .logo-text {
+      font-size: 0.9rem;
     }
 
     .social-link {
