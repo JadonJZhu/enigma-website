@@ -319,12 +319,14 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
     z-index: 3;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transform: translateY(20px) scale(0.95);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .upcoming-event-card.show {
     opacity: 1;
     visibility: visible;
+    transform: translateY(0) scale(1);
   }
 
   .upcoming-event-badge {
