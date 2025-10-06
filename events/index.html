@@ -112,7 +112,7 @@
           const startTime = formatTime(upcomingEvent.startTime);
           const endTime = formatTime(upcomingEvent.endTime);
           const location = upcomingEvent.location.trim() || 'To be decided';
-          const baseDescription = upcomingEvent.description.trim() || `Join us for this exciting ${upcomingEvent.name.toLowerCase()}!`;
+          const baseDescription = upcomingEvent.description.trim() || '';
           const description = appendDiscordLink(baseDescription);
 
           upcomingEventContainer.innerHTML = `
@@ -270,8 +270,8 @@
               const location = event.location.trim() || 'To be decided';
               eventItem.querySelector('.location').textContent = `📍 ${location}`;
 
-              // Use actual description or generate a generic one
-              const baseDescription = event.description.trim() || `Join us for this exciting ${event.name.toLowerCase()}!`;
+              // Use actual description or empty string for Discord link only
+              const baseDescription = event.description.trim() || '';
               const description = appendDiscordLink(baseDescription);
               eventItem.querySelector('.event-description').innerHTML = description;
 
