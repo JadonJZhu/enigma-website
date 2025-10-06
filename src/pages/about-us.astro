@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -9,17 +9,86 @@ import officersGroup from '../assets/officers/officers.JPG';
 import fs from 'fs';
 import path from 'path';
 
+// Import photos for gallery
+import enigmatable from '../assets/photos/24-25/enigmatable.webp';
+import someevent from '../assets/photos/24-25/someevent.webp';
+import trivia from '../assets/photos/24-25/trivia.webp';
+import picnic from '../assets/photos/24-25/picnic.webp';
+import westmarchesfinal from '../assets/photos/24-25/westmarchesfinal.jpg';
+import fridaynight from '../assets/photos/24-25/fridaynight.webp';
+import morepicnic from '../assets/photos/24-25/morepicnic.webp';
+
 // Import all officer images
 const officerImages = import.meta.glob('../assets/officers/*.JPG');
+
+const images = [
+  { src: enigmatable, alt: 'Enigma members at their regular game table' },
+  { src: someevent, alt: 'Enigma members at a special event' },
+  { src: trivia, alt: 'Enigma trivia night' },
+  { src: picnic, alt: 'Enigma picnic event' },
+  { src: westmarchesfinal, alt: 'West Marches campaign final session' },
+  { src: fridaynight, alt: 'Enigma Friday night gaming session' },
+  { src: morepicnic, alt: 'Enigma members at another picnic event' },
+];
+
+const galleryImages = await Promise.all(
+  images.map(async (image) => {
+    const optimizedImage = await getImage({
+      src: image.src,
+      width: 2000,
+      height: 1126,
+    });
+    return {
+      alt: image.alt,
+      src: optimizedImage.src,
+      srcset: optimizedImage.attributes.srcset,
+    };
+  })
+);
+
+// Function to parse CSV line properly handling quoted fields
+function parseCSVLine(line: string) {
+  const values = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+
+    if (char === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        // Escaped quote
+        current += '"';
+        i++; // Skip next quote
+      } else {
+        // Toggle quote state
+        inQuotes = !inQuotes;
+      }
+    } else if (char === ',' && !inQuotes) {
+      // Field separator
+      values.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+
+  // Add the last field
+  values.push(current.trim());
+
+  return values;
+}
 
 const csvPath = path.resolve('./src/data/officers-master-list.csv');
 const csvContent = fs.readFileSync(csvPath, 'utf-8');
 const officersData = csvContent.trim().split('\n').slice(1).map(line => {
-  const values = line.split(',');
+  const values = parseCSVLine(line);
   return {
     name: values[0],
     position: values[1],
-    biography: values[2]
+    year: values[2],
+    fieldOfStudy: values[3]?.replace(/^"|"$/g, ''), // Remove surrounding quotes
+    biography: values[4]?.replace(/^"|"$/g, '') // Remove surrounding quotes
   };
 });
 
@@ -29,7 +98,7 @@ async function getOfficerImage(name: string) {
   const imagePath = `../assets/officers/${imageName}.JPG`;
   
   if (officerImages[imagePath]) {
-    const imageModule = await officerImages[imagePath]();
+    const imageModule = await officerImages[imagePath]() as any;
     return imageModule.default;
   }
   
@@ -66,8 +135,8 @@ async function getOfficerImage(name: string) {
             <div class="mission-text">
               <p>
                 From casual game nights to tournament-style competitions, from learning the basics of Dungeons
-                & Dragons to exploring the streets of LA, Enigma provides the platform and
-                community for you to level up your gaming and social experience while making lifelong friends along the way.
+                & Dragons to exploring the streets of LA, Enigma provides a
+                community for you to participate in a gaming and social experience while making lifelong friends along the way.
                 We include everyone from undergrads to graduate students and alumni. If you're interested in board games, tabletop games, or anything nerdy (even just a bit), you're always welcome with us.
                 There is no formal membership, so drop by any time! Students, staff, faculty, and local community members are all welcome!
               </p>
@@ -96,6 +165,11 @@ async function getOfficerImage(name: string) {
             />
           </div>
 
+          <div class="hover-indicator">
+            <span class="hover-text">Hover over each officer to learn more about them!</span>
+            <span class="hover-arrow">↓</span>
+          </div>
+
           <div class="officers-grid">
             {officersData.map(async (officer) => {
               const imageSrc = await getOfficerImage(officer.name);
@@ -121,12 +195,90 @@ async function getOfficerImage(name: string) {
                 <div class="officer-info">
                   <h3 class="officer-name">{officer.name}</h3>
                   <h4 class="officer-title">{officer.position}</h4>
-                  <p class="officer-bio">
-                    {officer.biography}
-                  </p>
+                </div>
+                <div class="officer-hover-overlay">
+                  <button class="popup-close-btn" aria-label="Close popup">×</button>
+                  <div class="hover-content">
+                    <h4>About {officer.name}</h4>
+                    <div class="hover-details">
+                      <div class="detail-item">
+                        <span class="detail-label">Position:</span>
+                        <span class="detail-value">{officer.position}</span>
+                      </div>
+                      <div class="detail-item">
+                        <span class="detail-label">Year:</span>
+                        <span class="detail-value">{officer.year.charAt(0).toUpperCase() + officer.year.slice(1)}</span>
+                      </div>
+                      <div class="detail-item">
+                        <span class="detail-label">Field:</span>
+                        <span class="detail-value">{officer.fieldOfStudy}</span>
+                      </div>
+                      <div class="detail-item bio-item">
+                        <span class="detail-label">Bio:</span>
+                        <span class="detail-value">{officer.biography}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )})}
+          </div>
+        </div>
+      </section>
+
+      <!-- Photos Section -->
+      <section class="photos-section">
+        <div class="container">
+          <h2 class="section-title">Photos</h2>
+
+          <!-- Gallery Section -->
+          <div class="gallery-section">
+            <!-- Filter Controls -->
+            <div class="gallery-controls">
+              <label for="campaign-select" class="filter-label">Year:</label>
+              <select id="campaign-select" class="filter-dropdown">
+                <option value="2024-2025">2024-2025</option>
+              </select>
+            </div>
+
+            <!-- Main Gallery Display -->
+            <div class="gallery-container">
+              <!-- Main Image Display -->
+              <div class="main-image-container">
+                <div class="main-image-wrapper">
+                  <Image
+                    id="main-image"
+                    src={images[0].src}
+                    alt={images[0].alt}
+                    class="main-image"
+                    width={2000}
+                    height={1126}
+                    sizes="(min-width: 1000px) 1000px, 100vw"
+                  />
+                  <div class="image-overlay"></div>
+                  <button class="nav-arrow prev-arrow" id="prev-btn" aria-label="Previous image">❮</button>
+                  <button class="nav-arrow next-arrow" id="next-btn" aria-label="Next image">❯</button>
+                </div>
+
+              </div>
+
+              <!-- Thumbnail Strip -->
+              <div class="thumbnail-strip">
+                <div class="thumbnail-container" id="thumbnail-container">
+                  {images.map((image, index) => (
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      class:list={["thumbnail", { active: index === 0 }]}
+                      width={120}
+                      height={80}
+                      data-index={index}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -227,6 +379,42 @@ async function getOfficerImage(name: string) {
     background-clip: padding-box, border-box;
   }
 
+  .hover-indicator {
+    text-align: center;
+    margin: 2rem 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    animation: bounce 2s 3;
+  }
+
+  .hover-text {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    font-style: italic;
+  }
+
+  .hover-arrow {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    animation: bounce 2s 3;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-5px);
+    }
+    60% {
+      transform: translateY(-3px);
+    }
+  }
+
   .officers-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -246,7 +434,8 @@ async function getOfficerImage(name: string) {
     background-clip: padding-box, border-box;
     transition: all 0.3s ease;
     position: relative;
-    overflow: hidden;
+    cursor: pointer;
+    z-index: 1;
   }
 
   .officer-card::before {
@@ -322,11 +511,139 @@ async function getOfficerImage(name: string) {
     font-style: italic;
   }
 
-  .officer-bio {
+  .officer-basic-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .officer-year,
+  .officer-field {
+    font-weight: 500;
+  }
+
+  .info-separator {
+    color: #ccc;
+    font-weight: bold;
+  }
+
+  .officer-hover-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    border-radius: 20px;
+    padding: 2rem;
+    z-index: 10000;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--primary-color);
+    max-width: 500px;
+    width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    pointer-events: none;
+  }
+
+  .officer-hover-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .popup-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10001;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .popup-close-btn:hover {
+    background: var(--secondary-color);
+    transform: scale(1.1);
+  }
+
+
+
+  .hover-content {
+    text-align: center;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .hover-content h4 {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+
+  .hover-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    text-align: left;
+    padding: 0.75rem;
+    background: rgba(155, 89, 182, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-color);
+  }
+
+  .detail-item.bio-item {
+    margin-top: 0.5rem;
+  }
+
+  .detail-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-value {
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .detail-item.bio-item .detail-value {
     font-size: 0.95rem;
     line-height: 1.6;
-    color: #666;
-    margin: 0;
   }
 
   /* Responsive Design */
@@ -337,6 +654,18 @@ async function getOfficerImage(name: string) {
 
     .group-photo {
       border-radius: 12px;
+    }
+
+    .hover-indicator {
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    .hover-text {
+      font-size: 0.8rem;
+    }
+
+    .hover-arrow {
+      font-size: 1rem;
     }
 
     .officers-grid {
@@ -361,11 +690,54 @@ async function getOfficerImage(name: string) {
     .avatar-emoji {
       font-size: 2.5rem;
     }
+
+    .officer-basic-info {
+      font-size: 0.8rem;
+      gap: 0.25rem;
+    }
+
+    .officer-hover-overlay {
+      padding: 1.5rem;
+      max-width: 90vw;
+    }
+
+    .hover-content h4 {
+      font-size: 1.5rem;
+    }
+
+    .detail-item {
+      padding: 0.5rem;
+    }
+
+    .detail-label {
+      font-size: 0.9rem;
+    }
+
+    .detail-value {
+      font-size: 0.9rem;
+    }
+
+    .detail-item.bio-item .detail-value {
+      font-size: 0.85rem;
+    }
   }
 
   @media (max-width: 480px) {
     .group-photo-container {
       margin-bottom: 1.5rem;
+    }
+
+    .hover-indicator {
+      margin: 1rem 0 0.5rem;
+      gap: 0.25rem;
+    }
+
+    .hover-text {
+      font-size: 0.75rem;
+    }
+
+    .hover-arrow {
+      font-size: 0.9rem;
     }
 
     .page-header {
@@ -388,5 +760,421 @@ async function getOfficerImage(name: string) {
     .section-title {
       font-size: 2rem;
     }
+
+    .officer-basic-info {
+      font-size: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .officer-hover-overlay {
+      padding: 1rem;
+      max-width: 95vw;
+    }
+
+    .hover-content h4 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .detail-item {
+      padding: 0.5rem;
+    }
+
+    .detail-label {
+      font-size: 0.8rem;
+    }
+
+    .detail-value {
+      font-size: 0.85rem;
+    }
+
+    .detail-item.bio-item .detail-value {
+      font-size: 0.8rem;
+    }
+  }
+
+  /* Photos Section */
+  .photos-section {
+    background: var(--background-color);
+    padding: 4rem 0;
+  }
+
+  .photos-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    font-family: 'Raleway', sans-serif;
+    opacity: 0.9;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #666;
+  }
+
+  /* Gallery Section */
+  .gallery-controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .filter-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: var(--text-color);
+    font-size: 1.1rem;
+    margin-right: 1rem;
+    align-self: center;
+  }
+
+  .filter-dropdown {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    background: white;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .filter-dropdown:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.2);
+  }
+
+  /* Main Gallery */
+  .gallery-container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .main-image-container {
+    margin-bottom: 2rem;
+  }
+
+  .main-image-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 3px solid var(--secondary-color);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .main-image {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0) 100%);
+    pointer-events: none;
+  }
+
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(155, 89, 182, 0.9);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  .nav-arrow:hover {
+    background: var(--primary-color);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .prev-arrow {
+    left: 20px;
+  }
+
+  .next-arrow {
+    right: 20px;
+  }
+
+  /* Thumbnail Strip */
+  .thumbnail-strip {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+
+  .thumbnail-container {
+    display: flex;
+    gap: 1rem;
+    padding: 0 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .thumbnail {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    opacity: 0.7;
+  }
+
+  .thumbnail:hover {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .thumbnail.active {
+    opacity: 1;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.3);
+  }
+
+  /* Gallery Info */
+  .gallery-info {
+    margin-top: 4rem;
+    text-align: center;
+  }
+
+  .info-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .info-title {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+  }
+
+  .info-text {
+    color: #666;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .main-image {
+      height: 300px;
+    }
+
+    .nav-arrow {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .prev-arrow {
+      left: 10px;
+    }
+
+    .next-arrow {
+      right: 10px;
+    }
+
+    .thumbnail {
+      width: 100px;
+      height: 70px;
+    }
+
+    .filter-label {
+      font-size: 1rem;
+    }
+
+    .filter-dropdown {
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .main-image {
+      height: 250px;
+    }
+
+    .thumbnail-container {
+      gap: 0.5rem;
+      padding: 0 0.5rem;
+    }
+
+    .thumbnail {
+      width: 80px;
+      height: 60px;
+    }
   }
 </style>
+
+<script define:vars={{ galleryImages }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mainImageWrapper = document.querySelector('.main-image-wrapper');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+
+    let currentIndex = 0;
+
+    function updateMainImage(index) {
+      const newImage = galleryImages[index];
+
+      // Find the existing image element and update it instead of recreating everything
+      const existingImg = mainImageWrapper.querySelector('#main-image');
+      if (existingImg) {
+        existingImg.src = newImage.src;
+        existingImg.alt = newImage.alt;
+        if (newImage.srcset) {
+          existingImg.srcset = newImage.srcset;
+        }
+      }
+
+      // Update active thumbnail
+      thumbnails.forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
+
+      currentIndex = index;
+    }
+
+    // Thumbnail click handlers
+    thumbnails.forEach((thumbnail, index) => {
+      thumbnail.addEventListener('click', () => {
+        updateMainImage(index);
+      });
+    });
+
+    // Navigation button handlers
+    prevBtn.addEventListener('click', () => {
+      const newIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+      updateMainImage(newIndex);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const newIndex = (currentIndex + 1) % galleryImages.length;
+      updateMainImage(newIndex);
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        const newIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+        updateMainImage(newIndex);
+      } else if (e.key === 'ArrowRight') {
+        const newIndex = (currentIndex + 1) % galleryImages.length;
+        updateMainImage(newIndex);
+      }
+    });
+
+    // Officer card hover/touch functionality
+    const officerCards = document.querySelectorAll('.officer-card');
+    let activePopup = null;
+    let activeCard = null;
+
+    // Detect if device supports touch
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    function closePopup() {
+      if (activePopup) {
+        activePopup.classList.remove('show');
+        activePopup = null;
+      }
+      if (activeCard) {
+        activeCard.style.zIndex = '';
+        activeCard = null;
+      }
+    }
+
+    function showPopup(card, popup) {
+      // Hide any existing popup
+      closePopup();
+
+      // Show new popup and elevate card z-index
+      popup.classList.add('show');
+      card.style.zIndex = '10001'; // Higher than popup's 10000
+      activePopup = popup;
+      activeCard = card;
+    }
+
+    // Handle clicks outside popup to close it
+    function handleOutsideClick(e) {
+      if (activePopup && !activePopup.contains(e.target) && !activeCard.contains(e.target)) {
+        closePopup();
+      }
+    }
+
+    // Add outside click listener for mobile
+    document.addEventListener('click', handleOutsideClick);
+
+    officerCards.forEach(card => {
+      const popup = card.querySelector('.officer-hover-overlay');
+      const closeBtn = popup.querySelector('.popup-close-btn');
+
+      if (isTouchDevice) {
+        // Mobile/Touch devices: Use click/tap to show popup
+        card.addEventListener('click', (e) => {
+          e.stopPropagation(); // Prevent outside click handler
+          if (activePopup === popup) {
+            // If clicking the same card that's already active, close it
+            closePopup();
+          } else {
+            showPopup(card, popup);
+          }
+        });
+
+        // Show close button for mobile
+        closeBtn.style.display = 'flex';
+
+        // Handle close button click
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closePopup();
+        });
+
+        // Handle touch events for better mobile experience
+        card.addEventListener('touchstart', (e) => {
+          e.stopPropagation();
+        });
+
+      } else {
+        // Desktop: Use hover to show popup
+        card.addEventListener('mouseenter', () => {
+          showPopup(card, popup);
+        });
+
+        // Handle mouse leaving the card (but not the popup)
+        card.addEventListener('mouseleave', (e) => {
+          // Only hide if we're not moving to the popup
+          if (!popup.contains(e.relatedTarget)) {
+            closePopup();
+          }
+        });
+
+        // Handle mouse leaving the popup
+        popup.addEventListener('mouseleave', () => {
+          closePopup();
+        });
+
+        // Hide close button (not needed for hover)
+        closeBtn.style.display = 'none';
+      }
+    });
+  });
+</script>
