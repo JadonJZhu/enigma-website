@@ -29,6 +29,9 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
           <p class="hero-subtitle">
             Hello Enigmans, Enigmaniacs, and Enigmata! We're excited to announce the 40-year anniversary of Enigma, scheduled for 2026!
           </p>
+          <a href="https://crowdfunding.ucla.edu/project/47996" target="_blank" rel="noopener noreferrer" class="donation-callout">
+            <strong>Support Enigmaversary! Donations needed to make this celebration possible.</strong>
+          </a>
         </div>
       </section>
 
@@ -231,12 +234,37 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
     font-family: 'Raleway', sans-serif;
     font-size: clamp(1.2rem, 2.5vw, 1.5rem);
     color: #2a2525;
-    margin: 0 0 2rem 0;
+    margin: 0 0 1.5rem 0;
     line-height: 1.6;
 
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .donation-callout {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+    border: 2px solid var(--sunset-orange);
+    box-shadow: 0 4px 15px rgba(255, 167, 38, 0.2);
+    max-width: 700px;
+    margin: 0 auto 2rem auto;
+    text-align: center;
+    color: var(--sunset-red);
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .donation-callout:hover {
+    color: var(--sunset-orange);
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 6px 20px rgba(255, 167, 38, 0.3);
+    transform: translateY(-2px);
   }
 
   /* Body background for entire page */
@@ -539,7 +567,13 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
 
     .enigmaversary-hero .hero-subtitle {
       font-size: 1.1rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .donation-callout {
+      font-size: 0.9rem;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .info-grid {
@@ -600,7 +634,14 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
     .enigmaversary-hero .hero-subtitle {
       font-size: 1rem;
       padding: 0 1rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .donation-callout {
+      font-size: 0.85rem;
+      padding: 0.7rem 0.8rem;
+      margin: 0 1rem 1.5rem 1rem;
+      max-width: none;
     }
 
     .container {
