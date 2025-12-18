@@ -4,6 +4,11 @@
       // Event data
       const eventData = eventsByQuarter;
 
+      // Helper function to slugify text
+      function slugify(text) {
+        return text.toLowerCase().replace(/\s+/g, '-');
+      }
+
       // Function to format date for display
       function formatEventDate(dateStr) {
         try {
@@ -337,25 +342,12 @@
           quarterSelect.appendChild(option);
         });
 
-        function getCurrentQuarterSlug() {
-            const now = new Date();
-            const month = now.getMonth();
-            const year = now.getFullYear();
-            let season;
-            if (month <= 2) season = 'winter'; // Jan, Feb, Mar
-            else if (month <= 5) season = 'spring'; // Apr, May, Jun
-            else if (month <= 8) season = 'summer'; // Jul, Aug, Sep
-            else season = 'fall'; // Oct, Nov, Dec
-            return `${season}-${year}`;
-        }
-
-        const currentQuarterSlug = getCurrentQuarterSlug();
-        
-        // Find the current quarter or the next future one
-        let selectedQuarter = sortedQuarters.find(q => q >= currentQuarterSlug);
-
-        // If no future quarter is found, default to the last available quarter
-        if (!selectedQuarter && sortedQuarters.length > 0) {
+        // Find the quarter of the next upcoming event
+        const nextEvent = findNextUpcomingEvent();
+        let selectedQuarter;
+        if (nextEvent) {
+          selectedQuarter = slugify(nextEvent.quarter);
+        } else if (sortedQuarters.length > 0) {
           selectedQuarter = sortedQuarters[sortedQuarters.length - 1];
         }
 
