@@ -125,9 +125,6 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
                 See Upcoming Events
               </a>
             </div>
-            <a href="https://crowdfunding.ucla.edu/project/47996" class="cta-enigmaversary" target="_blank" rel="noopener noreferrer" aria-label="Support EnigmaVersary 40 crowdfunding campaign">
-              Support EnigmaVersary 40
-            </a>
           </div>
         </div>
       </section>
@@ -322,27 +319,6 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
     box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3);
   }
 
-  .cta-enigmaversary {
-    display: inline-block;
-    background: transparent;
-    color: #E74C3C;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: clamp(1rem, 1.5vw, 1.2rem);
-    padding: 1rem 2rem;
-    text-decoration: none;
-    border: 2px solid #E74C3C;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    text-shadow: none;
-  }
-
-  .cta-enigmaversary:hover {
-    background: #E74C3C;
-    color: #FDFEFE;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
-  }
 
   /* Responsive adjustments */
   @media (max-width: 480px) {
@@ -364,8 +340,7 @@ console.log('Upcoming event found:', upcomingEvent ? upcomingEvent.name : 'None'
     }
 
     .cta-primary,
-    .cta-secondary,
-    .cta-enigmaversary {
+    .cta-secondary {
       padding: 0.9rem 1.5rem;
       font-size: 0.95rem;
     }
