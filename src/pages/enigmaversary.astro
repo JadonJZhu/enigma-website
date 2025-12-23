@@ -75,6 +75,13 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
             </div>
           </div>
 
+          <!-- Events Calendar Button -->
+          <div class="schedule-button-container">
+            <a href="https://docs.google.com/spreadsheets/d/1I7O4GPCI_FQdcNYnTB5tviUMZJkipwfYiaDsBYTVNyU/edit?gid=660397118#gid=660397118" target="_blank" rel="noopener noreferrer" class="events-calendar-button">
+              View Events Calendar
+            </a>
+          </div>
+
           <!-- How to Participate -->
           <div class="participation-section">
             <h2 class="section-title">How to Participate</h2>
@@ -82,7 +89,7 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
               <ul class="participation-list">
                 <li>RSVP to <a href="https://docs.google.com/forms/d/e/1FAIpQLSc52QWXd9m7zUPOc8Z2WSlxkqujbXd64aJVGM_GaezecVk55A/viewform?usp=header" target="_blank" rel="noopener noreferrer" class="participation-link">our form</a> if you haven't already (note this is a new form from the Interest Form that was sent a couple months ago)</li>
                 <li>Contact us at <a href="mailto:enigma.uclaofficers@gmail.com" class="email-link">enigma.uclaofficers@gmail.com</a> or on <a href="https://discord.gg/yeayd5nS7x" target="_blank" rel="noopener noreferrer" class="participation-link">Discord</a> to get involved with planning, share ideas for events, or ask any questions</li>
-                <li>Pull out your archives of photos, documents, flyers, and props from every era! Please email <a href="mailto:enigma.uclaofficers@gmail.com" class="email-link">enigma.uclaofficers@gmail.com</a> if you plan to submit any digital or physical artifacts</li>
+                <li>Pull out your archives of photos, documents, flyers, and props from every era! Submit your artifacts by uploading to the following <a href="https://drive.google.com/drive/folders/1PuKij5Hw3KsZfM0amsleDp84g4GsRTEW?usp=share_link" target="_blank" rel="noopener noreferrer" class="participation-link">Google Drive</a></li>
                 <li>Find your way to Los Angeles in January 2026!</li>
               </ul>
             </div>
@@ -94,55 +101,12 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
             <div class="get-involved-content">
               <ul class="get-involved-list">
                 <li>Contact us by email or Discord if you want to run a LARP that plays a big group and/or ties in to Enigma history</li>
-                <li>If you're interested in providing a short self-recorded video or a longer interview, <a href="https://forms.gle/TfMHdp3QzYqfNzXS7" target="_blank" rel="noopener noreferrer" class="participation-link">click here</a></li>
+                <li>If you're interested in providing a short self-recorded video or a longer interview, instructions can be found <a href="https://drive.google.com/drive/folders/10nYlf5wU1evGWZEngYr0-eQwyY_k3MHJ?usp=share_link" target="_blank" rel="noopener noreferrer" class="participation-link">here</a></li>
+                <li>Propose your own events for Sunday and Monday on the <a href="https://docs.google.com/spreadsheets/d/1I7O4GPCI_FQdcNYnTB5tviUMZJkipwfYiaDsBYTVNyU/edit?gid=1710369104#gid=1710369104" target="_blank" rel="noopener noreferrer" class="participation-link">official event calendar</a>. Also sign up for events on those days!</li>
               </ul>
             </div>
           </div>
 
-          <!-- Tentative Schedule -->
-          <div class="schedule-section">
-            <h2 class="section-title">Tentative Schedule</h2>
-            <div class="schedule-content">
-              <div class="schedule-item">
-                <div class="schedule-date">
-                  <span class="date">Friday Jan. 16</span>
-                </div>
-                <div class="schedule-details">
-                  <h4>Gaming and Zombie Tag in the evening at UCLA</h4>
-                </div>
-              </div>
-
-              <div class="schedule-item">
-                <div class="schedule-date">
-                  <span class="date">Saturday Jan. 17</span>
-                </div>
-                <div class="schedule-details">
-                  <h4>All-day extravaganza at a house in central LA</h4>
-                  <p>with festivities, group games, celebrations of Enigma history, potluck lunch, and taco truck dinner</p>
-                </div>
-              </div>
-
-              <div class="schedule-item">
-                <div class="schedule-date">
-                  <span class="date">Sunday Jan. 18</span>
-                </div>
-                <div class="schedule-details">
-                  <h4>Gaming, ultimate frisbee, basketball, and other activities at UCLA or across town</h4>
-                  <p>Group dinner at Cafe 50s (pay your own way)</p>
-                </div>
-              </div>
-
-              <div class="schedule-item">
-                <div class="schedule-date">
-                  <span class="date">Monday Jan 19</span>
-                </div>
-                <div class="schedule-details">
-                  <h4>Nothing official!</h4>
-                  <p>Chronoagents Road Rally, other games, and trips around LA</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
     </main>
@@ -296,7 +260,7 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
   /* Key Info Section */
   .key-info-section {
     margin-bottom: 4rem;
-    text-align: center;
+    text-align: ucenter;
   }
 
   .key-info-content {
@@ -507,6 +471,40 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
     line-height: 1.5;
   }
 
+  .schedule-button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .events-calendar-button {
+    display: inline-block;
+    padding: 2.5rem 2.5rem;
+    background: var(--sunset-gradient);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    min-width: 280px;
+  }
+
+  .events-calendar-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    background: linear-gradient(135deg, #FF8A65, #FFB74D, #FFF176, #FFAB91);
+  }
+
+  .events-calendar-button:active {
+    transform: translateY(-1px);
+  }
+
   /* Floating animation */
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
@@ -608,6 +606,12 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
 
     .schedule-item {
       padding: 1rem;
+    }
+
+    .events-calendar-button {
+      padding: 2rem 2rem;
+      font-size: 1.1rem;
+      min-width: 240px;
     }
   }
 </style>
