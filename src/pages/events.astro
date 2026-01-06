@@ -213,7 +213,7 @@ const eventsByQuarter = getEventsByQuarterStatic();
           const endTime = formatTime(upcomingEvent.endTime);
           const location = upcomingEvent.location.trim() || 'To be decided';
           const baseDescription = upcomingEvent.description.trim() || '';
-          const description = appendDiscordLink(baseDescription);
+          const description = baseDescription ? appendDiscordLink(baseDescription) : '';
 
           upcomingEventContainer.innerHTML = `
             <div class="upcoming-badge">UPCOMING EVENT</div>
@@ -372,8 +372,13 @@ const eventsByQuarter = getEventsByQuarterStatic();
 
               // Use actual description or empty string for Discord link only
               const baseDescription = event.description.trim() || '';
-              const description = appendDiscordLink(baseDescription);
+              const description = baseDescription ? appendDiscordLink(baseDescription) : '';
               eventItem.querySelector('.event-description').innerHTML = description;
+
+              // Add class for events without description to reduce height
+              if (!description) {
+                eventItem.querySelector('.event-item').classList.add('no-description');
+              }
 
               eventsContainer.appendChild(eventItem);
             });
@@ -538,7 +543,7 @@ const eventsByQuarter = getEventsByQuarterStatic();
     min-width: 100px;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
     font-family: 'Poppins', sans-serif;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   }
@@ -756,6 +761,22 @@ const eventsByQuarter = getEventsByQuarterStatic();
     border-left-color: #FFA500;
   }
 
+  .event-item.no-description .event-content {
+    padding: 1.5rem;
+  }
+
+  .event-item.no-description .event-date {
+    padding: 1.5rem 1rem;
+  }
+
+  .event-item.no-description .event-title {
+    font-size: 2rem;
+  }
+
+  .event-item.no-description .event-details {
+    font-size: 1.1rem;
+  }
+
   .event-item.special-event .event-date {
     background: linear-gradient(135deg, #FFD700, #FFA500);
     position: relative;
@@ -783,7 +804,7 @@ const eventsByQuarter = getEventsByQuarterStatic();
     justify-content: center;
     align-items: center;
     font-family: 'Poppins', sans-serif;
-    gap: 0.5rem;
+    gap: 0.25rem;
   }
 
   .date {
