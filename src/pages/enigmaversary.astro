@@ -82,6 +82,19 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
             </a>
           </div>
 
+          <!-- Schedule Overview -->
+          <div class="schedule-overview-section">
+            <h2 class="section-title">Schedule Overview</h2>
+            <div class="schedule-overview-content">
+              <ul class="schedule-overview-list">
+                <li>On <strong>Friday</strong>, come to Ackerman Union for Open Board Gaming from 5 PM to 10 PM and Zombie Tag from 8 PM to 10 PM.</li>
+                <li>On <strong>Saturday</strong>, join us at an alumni's house for various events, including LARPs, social deception games, and more! Join our <a href="https://discord.gg/yeayd5nS7x" target="_blank" rel="noopener noreferrer" class="participation-link">Discord</a> for further details and to reserve your seat for transportation on our charter bus or a rideshare.</li>
+                <li>On <strong>Sunday</strong>, participate in tabletop games at Saxon Suites and our Chrono Agents Road Rally in West LA. Join our <a href="https://discord.gg/yeayd5nS7x" target="_blank" rel="noopener noreferrer" class="participation-link">Discord</a> for sign up information.</li>
+                <li>On <strong>Monday</strong>, ice skate with us in Santa Monica and play various games at Saxon Suites. Join our <a href="https://discord.gg/yeayd5nS7x" target="_blank" rel="noopener noreferrer" class="participation-link">Discord</a> for further details.</li>
+              </ul>
+            </div>
+          </div>
+
           <!-- How to Participate -->
           <div class="participation-section">
             <h2 class="section-title">How to Participate</h2>
@@ -409,6 +422,42 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
     border-bottom: none;
   }
 
+  /* Schedule Overview Section */
+  .schedule-overview-section {
+    margin-bottom: 4rem;
+  }
+
+  .schedule-overview-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .schedule-overview-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .schedule-overview-list li {
+    position: relative;
+    padding: 1rem 0 1rem 2rem;
+    color: #5D4037;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(255, 167, 38, 0.2);
+  }
+
+  .schedule-overview-list li::before {
+    content: '📅';
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    font-size: 1.2rem;
+  }
+
+  .schedule-overview-list li:last-child {
+    border-bottom: none;
+  }
+
   /* Schedule Section */
   .schedule-section {
     margin-bottom: 2rem;
@@ -564,6 +613,15 @@ import enigmaversaryLogo from '../assets/enigmaversary/enigmaversary-logo.png';
     }
 
     .get-involved-list li::before {
+      font-size: 1rem;
+      top: 0.8rem;
+    }
+
+    .schedule-overview-list li {
+      padding-left: 1.8rem;
+    }
+
+    .schedule-overview-list li::before {
       font-size: 1rem;
       top: 0.8rem;
     }
