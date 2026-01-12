@@ -174,11 +174,6 @@ const eventsByQuarter = getEventsByQuarterStatic();
         }
       }
 
-      // Function to append Discord link to descriptions
-      function appendDiscordLink(description) {
-        const discordText = ' Join our <a href="https://discord.gg/yeayd5nS7x" target="_blank" class="discord-link">Discord</a> for questions and last-minute updates.';
-        return description + discordText;
-      }
 
       // Function to find the next upcoming event
       function findNextUpcomingEvent() {
@@ -211,9 +206,13 @@ const eventsByQuarter = getEventsByQuarterStatic();
           const formattedDate = formatEventDate(upcomingEvent.startTime);
           const startTime = formatTime(upcomingEvent.startTime);
           const endTime = formatTime(upcomingEvent.endTime);
+          const startDate = parseEventDate(upcomingEvent.startTime);
+          const endDate = parseEventDate(upcomingEvent.endTime);
           const location = upcomingEvent.location.trim() || 'To be decided';
           const baseDescription = upcomingEvent.description.trim() || '';
-          const description = baseDescription ? appendDiscordLink(baseDescription) : '';
+          const description = baseDescription;
+
+          const timeDisplay = (startTime === endTime || (startDate && endDate && endDate <= startDate)) ? startTime : `${startTime} - ${endTime}`;
 
           upcomingEventContainer.innerHTML = `
             <div class="upcoming-badge">UPCOMING EVENT</div>
@@ -226,7 +225,7 @@ const eventsByQuarter = getEventsByQuarterStatic();
               <div class="upcoming-details">
                 <h2 class="upcoming-title">${upcomingEvent.name}</h2>
                 <div class="upcoming-meta">
-                  <span class="upcoming-time">🕐 ${startTime} - ${endTime}</span>
+                  <span class="upcoming-time">🕐 ${timeDisplay}</span>
                   <span class="upcoming-location">📍 ${location}</span>
                 </div>
                 <p class="upcoming-description">${description}</p>
@@ -246,7 +245,7 @@ const eventsByQuarter = getEventsByQuarterStatic();
       function renderFridayGameNight() {
         const fridayGameNightContainer = document.getElementById('friday-game-night');
         const baseDescription = "Join us for a casual Friday night of gaming! Play with Enigma's extensive board game collection or bring your own games. All skill levels welcome in this relaxed, social atmosphere.";
-        const description = appendDiscordLink(baseDescription);
+        const description = baseDescription;
 
         fridayGameNightContainer.innerHTML = `
           <div class="upcoming-badge">REGULAR EVENT</div>
@@ -364,15 +363,18 @@ const eventsByQuarter = getEventsByQuarterStatic();
 
               const startTime = formatTime(event.startTime);
               const endTime = formatTime(event.endTime);
-              eventItem.querySelector('.time').textContent = `🕐 ${startTime} - ${endTime}`;
+              const startDate = parseEventDate(event.startTime);
+              const endDate = parseEventDate(event.endTime);
+              const timeDisplay = (startTime === endTime || (startDate && endDate && endDate <= startDate)) ? startTime : `${startTime} - ${endTime}`;
+              eventItem.querySelector('.time').textContent = `🕐 ${timeDisplay}`;
 
               // Use actual location or default to "To be decided"
               const location = event.location.trim() || 'To be decided';
               eventItem.querySelector('.location').textContent = `📍 ${location}`;
 
-              // Use actual description or empty string for Discord link only
+              // Use actual description or empty string
               const baseDescription = event.description.trim() || '';
-              const description = baseDescription ? appendDiscordLink(baseDescription) : '';
+              const description = baseDescription;
               eventItem.querySelector('.event-description').innerHTML = description;
 
               // Add class for events without description to reduce height
