@@ -3,7 +3,6 @@ import { Image, getImage } from 'astro:assets';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import officersGroup from '../assets/officers/officers.JPG';
 
 // Import officers data
 import fs from 'fs';
@@ -17,9 +16,6 @@ import picnic from '../assets/photos/24-25/picnic.webp';
 import westmarchesfinal from '../assets/photos/24-25/westmarchesfinal.jpg';
 import fridaynight from '../assets/photos/24-25/fridaynight.webp';
 import morepicnic from '../assets/photos/24-25/morepicnic.webp';
-
-// Import all officer images
-const officerImages = import.meta.glob('../assets/officers/*.JPG');
 
 const images = [
   { src: enigmatable, alt: 'Enigma members at their regular game table' },
@@ -46,63 +42,90 @@ const galleryImages = await Promise.all(
   })
 );
 
-// Function to parse CSV line properly handling quoted fields
-function parseCSVLine(line: string) {
-  const values = [];
+// Parse the whole CSV at once so quoted fields may contain commas, escaped quotes, and line breaks
+function parseCSV(text: string) {
+  const rows: string[][] = [];
+  let row: string[] = [];
   let current = '';
   let inQuotes = false;
 
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
 
-    if (char === '"') {
-      if (inQuotes && line[i + 1] === '"') {
-        // Escaped quote
+    if (inQuotes) {
+      if (char === '"' && text[i + 1] === '"') {
         current += '"';
-        i++; // Skip next quote
+        i++;
+      } else if (char === '"') {
+        inQuotes = false;
       } else {
-        // Toggle quote state
-        inQuotes = !inQuotes;
+        current += char;
       }
-    } else if (char === ',' && !inQuotes) {
-      // Field separator
-      values.push(current.trim());
+    } else if (char === '"') {
+      inQuotes = true;
+    } else if (char === ',') {
+      row.push(current.trim());
       current = '';
-    } else {
+    } else if (char === '\n') {
+      row.push(current.trim());
+      rows.push(row);
+      row = [];
+      current = '';
+    } else if (char !== '\r') {
       current += char;
     }
   }
 
-  // Add the last field
-  values.push(current.trim());
+  if (current || row.length) {
+    row.push(current.trim());
+    rows.push(row);
+  }
 
-  return values;
+  return rows;
 }
 
 const csvPath = path.resolve('./src/data/officers-master-list.csv');
 const csvContent = fs.readFileSync(csvPath, 'utf-8');
-const officersData = csvContent.trim().split('\n').slice(1).map(line => {
-  const values = parseCSVLine(line);
+const officerPhotos = import.meta.glob<ImageMetadata>('../assets/officers/[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]/*.JPG', { eager: true, import: 'default' });
+
+const allOfficers = parseCSV(csvContent.trim()).slice(1).map(values => {
+  const name = values[0];
+  const term = values[5];
+  const slug = name.toLowerCase().replace(/\s+/g, '');
   return {
-    name: values[0],
+    name,
+    slug,
     position: values[1],
-    year: values[2],
-    fieldOfStudy: values[3]?.replace(/^"|"$/g, ''), // Remove surrounding quotes
-    biography: values[4]?.replace(/^"|"$/g, '') // Remove surrounding quotes
+    year: values[2].charAt(0).toUpperCase() + values[2].slice(1),
+    fieldOfStudy: values[3],
+    biography: values[4],
+    term,
+    photo: officerPhotos[`../assets/officers/${term}/${slug}.JPG`] ?? null,
   };
 });
 
-// Function to get image filename for an officer
-async function getOfficerImage(name: string) {
-  const imageName = name.toLowerCase().replace(/\s+/g, '');
-  const imagePath = `../assets/officers/${imageName}.JPG`;
-  
-  if (officerImages[imagePath]) {
-    const imageModule = await officerImages[imagePath]() as any;
-    return imageModule.default;
-  }
-  
-  return null; // or a default image path
+// Newest term is the current board; everything else becomes history
+const terms = [...new Set(allOfficers.map(officer => officer.term))].sort().reverse();
+const currentTerm = terms[0];
+const currentOfficers = allOfficers.filter(officer => officer.term === currentTerm);
+const pastTerms = terms.slice(1).map(term => ({
+  term,
+  label: term.replace('-', '–'),
+  groupPhoto: officerPhotos[`../assets/officers/${term}/group.JPG`] ?? null,
+  officers: allOfficers.filter(officer => officer.term === term),
+}));
+const currentGroupPhoto = officerPhotos[`../assets/officers/${currentTerm}/group.JPG`];
+
+// Bios are plain text; blank lines split paragraphs and ~~text~~ marks a strikethrough
+function escapeHTML(text: string) {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function bioToHTML(bio: string) {
+  return bio
+    .split(/\n\s*\n/)
+    .map(paragraph => `<p>${escapeHTML(paragraph.trim()).replace(/~~(.+?)~~/g, '<s>$1</s>')}</p>`)
+    .join('');
 }
 ---
 
@@ -154,77 +177,80 @@ async function getOfficerImage(name: string) {
       </section>
 
       <!-- Officers Section -->
-      <section class="officers-section">
+      <section class="officers-section" aria-labelledby="officers-title">
         <div class="container">
-          <h2 class="section-title">Meet the Officers</h2>
+          <h2 class="section-title" id="officers-title">Meet the Officers</h2>
+          <p class="officers-term">{currentTerm.replace('-', '–')} school year</p>
 
-          <!-- Group Photo -->
-          <div class="group-photo-container">
+          <figure class="group-photo-figure">
             <Image
-              src={officersGroup}
-              alt="Enigma officers group photo"
+              src={currentGroupPhoto}
+              alt={`The ${currentTerm.replace('-', '–')} Enigma officers on the steps of Powell Library`}
               class="group-photo"
+              widths={[800, 1200, 1616]}
+              sizes="(min-width: 1200px) 1136px, 100vw"
             />
-          </div>
+          </figure>
 
-          <div class="hover-indicator">
-            <span class="hover-text">Hover over each officer to learn more about them!</span>
-            <span class="hover-arrow">↓</span>
-          </div>
+          <p class="officers-hint">Select an officer to read their bio.</p>
 
-          <div class="officers-grid">
-            {officersData.map(async (officer) => {
-              const imageSrc = await getOfficerImage(officer.name);
-              return (
-              <div class="officer-card">
-                <div class="officer-avatar">
-                  <div class={`avatar-container ${officer.name.toLowerCase().replace(/\s+/g, '')}`}>
-                    {imageSrc ? (
+          <ul class="officers-grid" role="list">
+            {currentOfficers.map((officer) => (
+              <li>
+                <button class="officer" type="button" data-dialog={`officer-${officer.slug}`}>
+                  <span class="officer-arch">
+                    {officer.photo ? (
                       <Image
-                        src={imageSrc}
-                        alt={`${officer.name} profile photo`}
-                        class="officer-image"
-                        width={120}
-                        height={120}
+                        src={officer.photo}
+                        alt=""
+                        class="officer-photo"
+                        widths={[300, 600]}
+                        sizes="(min-width: 768px) 260px, 45vw"
                       />
                     ) : (
-                      <div class="avatar-placeholder">
-                        <span class="avatar-emoji">👤</span>
-                      </div>
+                      <span class="officer-photo officer-photo-empty" aria-hidden="true">{officer.name.charAt(0)}</span>
                     )}
-                  </div>
-                </div>
-                <div class="officer-info">
-                  <h3 class="officer-name">{officer.name}</h3>
-                  <h4 class="officer-title">{officer.position}</h4>
-                </div>
-                <div class="officer-hover-overlay">
-                  <button class="popup-close-btn" aria-label="Close popup">×</button>
-                  <div class="hover-content">
-                    <h4>About {officer.name}</h4>
-                    <div class="hover-details">
-                      <div class="detail-item">
-                        <span class="detail-label">Position:</span>
-                        <span class="detail-value">{officer.position}</span>
-                      </div>
-                      <div class="detail-item">
-                        <span class="detail-label">Year:</span>
-                        <span class="detail-value">{officer.year.charAt(0).toUpperCase() + officer.year.slice(1)}</span>
-                      </div>
-                      <div class="detail-item">
-                        <span class="detail-label">Field:</span>
-                        <span class="detail-value">{officer.fieldOfStudy}</span>
-                      </div>
-                      <div class="detail-item bio-item">
-                        <span class="detail-label">Bio:</span>
-                        <span class="detail-value">{officer.biography}</span>
-                      </div>
+                  </span>
+                  <span class="officer-name">{officer.name}</span>
+                  <span class="officer-position">{officer.position}</span>
+                </button>
+
+                <dialog class="officer-dialog" id={`officer-${officer.slug}`} aria-labelledby={`officer-${officer.slug}-name`}>
+                  <form method="dialog" class="dialog-close-form">
+                    <button class="dialog-close" aria-label={`Close ${officer.name}'s bio`}>×</button>
+                  </form>
+                  <div class="dialog-layout">
+                    {officer.photo && (
+                      <span class="dialog-arch">
+                        <Image
+                          src={officer.photo}
+                          alt={`${officer.name}, ${officer.position}`}
+                          class="officer-photo"
+                          widths={[400, 800]}
+                          sizes="(min-width: 768px) 300px, 60vw"
+                        />
+                      </span>
+                    )}
+                    <div class="dialog-text">
+                      <h3 class="dialog-name" id={`officer-${officer.slug}-name`}>{officer.name}</h3>
+                      <p class="dialog-position">{officer.position}</p>
+                      <dl class="dialog-facts">
+                        <div>
+                          <dt>Year</dt>
+                          <dd>{officer.year}</dd>
+                        </div>
+                        <div>
+                          <dt>Studies</dt>
+                          <dd>{officer.fieldOfStudy}</dd>
+                        </div>
+                      </dl>
+                      <div class="dialog-bio" set:html={bioToHTML(officer.biography)} />
                     </div>
                   </div>
-                </div>
-              </div>
-            )})}
-          </div>
+                </dialog>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -284,6 +310,63 @@ async function getOfficerImage(name: string) {
           </div>
         </div>
       </section>
+
+      <!-- Past Officers Section -->
+      {pastTerms.length > 0 && (
+        <section class="history-section" aria-labelledby="history-title">
+          <div class="container">
+            <h2 class="section-title" id="history-title">Past Officers</h2>
+            <p class="history-intro">The people who kept Enigma running in years past.</p>
+
+            <div class="history-terms">
+              {pastTerms.map((past) => (
+                <details class="term">
+                  <summary class="term-summary">
+                    <span class="term-year">{past.label}</span>
+                    <span class="term-count">{past.officers.length} officers</span>
+                    <span class="term-chevron" aria-hidden="true"></span>
+                  </summary>
+
+                  <div class="term-body">
+                    {past.groupPhoto && (
+                      <Image
+                        src={past.groupPhoto}
+                        alt={`The ${past.label} Enigma officers`}
+                        class="term-group-photo"
+                        widths={[600, 1000]}
+                        sizes="(min-width: 1000px) 1000px, 100vw"
+                        loading="lazy"
+                      />
+                    )}
+                    <ul class="term-roster" role="list">
+                      {past.officers.map((officer) => (
+                        <li class="term-officer">
+                          <span class="term-arch">
+                            {officer.photo ? (
+                              <Image
+                                src={officer.photo}
+                                alt=""
+                                class="officer-photo"
+                                widths={[160, 320]}
+                                sizes="120px"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <span class="officer-photo officer-photo-empty" aria-hidden="true">{officer.name.charAt(0)}</span>
+                            )}
+                          </span>
+                          <span class="term-name">{officer.name}</span>
+                          <span class="term-position">{officer.position}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </main>
 
     <Footer />
@@ -359,439 +442,466 @@ async function getOfficerImage(name: string) {
     color: var(--text-color);
   }
 
-  /* Officers Section */
+  /* Officers Section
+     Portraits are clipped to round-top arches that echo the Royce Hall
+     arcade every headshot was taken in; the offset gold line is the archivolt. */
   .officers-section {
-    background: var(--background-color);
-    padding: 4rem 0;
+    --arch-gold: #D4A514;
+    --plum: #4A2360;
+    --lavender-wash: #F7F2FA;
+    background: var(--lavender-wash);
+    padding: 4rem 0 5rem;
   }
 
-  .group-photo-container {
+  .officers-term {
     text-align: center;
-    margin-bottom: 3rem;
+    font-size: 1.05rem;
+    color: var(--plum);
+    margin: 1.75rem 0 2.5rem;
+  }
+
+  .group-photo-figure {
+    margin: 0 auto;
+    max-width: 1136px;
   }
 
   .group-photo {
-    max-width: 100%;
+    display: block;
+    width: 100%;
     height: auto;
-    border-radius: 16px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    border: 2px solid transparent;
-    background-image: linear-gradient(white, white), var(--rainbow-gradient);
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
+    border-radius: 14px;
+    box-shadow: 0 18px 40px -18px rgba(74, 35, 96, 0.45);
   }
 
-  .hover-indicator {
+  .officers-hint {
     text-align: center;
-    margin: 2rem 0 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    animation: bounce 2s 3;
+    color: var(--plum);
+    font-size: 0.95rem;
+    margin: 3.5rem 0 2.5rem;
   }
 
-  .hover-text {
-    font-size: 0.9rem;
-    color: var(--primary-color);
-    font-weight: 500;
-    font-style: italic;
-  }
-
-  .hover-arrow {
-    font-size: 1.2rem;
-    color: var(--primary-color);
-    font-weight: bold;
-    animation: bounce 2s 3;
-  }
-
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(-5px);
-    }
-    60% {
-      transform: translateY(-3px);
-    }
-  }
-
+  /* Flex rather than grid so a short final row stays centered */
   .officers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3rem 2rem;
+    max-width: 1136px;
+    margin: 0 auto;
   }
 
-  .officer-card {
-    background: white;
-    border-radius: 16px;
-    padding: 2rem;
-    text-align: center;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    border: 2px solid transparent;
-    background-image: linear-gradient(white, white), var(--rainbow-gradient);
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-    transition: all 0.3s ease;
-    position: relative;
+  .officers-grid > li {
+    flex: 0 1 200px;
+  }
+
+  .officer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
     cursor: pointer;
-    z-index: 1;
+    text-align: center;
   }
 
-  .officer-card::before {
+  .officer-arch,
+  .dialog-arch,
+  .term-arch {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 999px 999px 10px 10px;
+  }
+
+  .officer-arch {
+    max-width: 240px;
+    margin-bottom: 1.25rem;
+  }
+
+  .officer-arch::before,
+  .dialog-arch::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(155, 89, 182, 0.05), rgba(241, 196, 15, 0.05));
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .officer-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-  }
-
-  .officer-card:hover::before {
-    opacity: 1;
-  }
-
-  .officer-avatar {
-    margin-bottom: 1.5rem;
-  }
-
-  .avatar-container {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    margin: 0 auto;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
-  }
-
-  .officer-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-
-  .avatar-placeholder {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
-  }
-
-  .avatar-emoji {
-    font-size: 3rem;
-    line-height: 1;
-  }
-
-  .officer-name {
-    font-size: 1.5rem;
-    color: var(--text-color);
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-  }
-
-  .officer-title {
-    font-size: 1rem;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    font-weight: 600;
-    font-style: italic;
-  }
-
-  .officer-basic-info {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: #888;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .officer-year,
-  .officer-field {
-    font-weight: 500;
-  }
-
-  .info-separator {
-    color: #ccc;
-    font-weight: bold;
-  }
-
-  .officer-hover-overlay {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(15px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    border-radius: 20px;
-    padding: 2rem;
-    z-index: 10000;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    border: 2px solid var(--primary-color);
-    max-width: 500px;
-    width: 90vw;
-    max-height: 80vh;
-    overflow-y: auto;
+    inset: -7px;
+    border: 2px solid var(--arch-gold);
+    border-radius: inherit;
+    transition: border-color 0.25s ease, inset 0.25s ease;
     pointer-events: none;
   }
 
-  .officer-hover-overlay.show {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
+  .officer-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 28%;
+    border-radius: inherit;
+    background: #E9DDF0;
   }
 
-  .popup-close-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    font-weight: bold;
-    cursor: pointer;
+  .officer-arch .officer-photo {
+    transition: filter 0.25s ease;
+  }
+
+  .officer-photo-empty {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
-    z-index: 10001;
-    line-height: 1;
-    padding: 0;
-  }
-
-  .popup-close-btn:hover {
-    background: var(--secondary-color);
-    transform: scale(1.1);
-  }
-
-
-
-  .hover-content {
-    text-align: center;
-    max-width: 100%;
-    width: 100%;
-  }
-
-  .hover-content h4 {
-    color: var(--text-color);
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    font-weight: 700;
-  }
-
-  .hover-details {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-  }
-
-  .detail-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    text-align: left;
-    padding: 0.75rem;
-    background: rgba(155, 89, 182, 0.05);
-    border-radius: 8px;
-    border-left: 3px solid var(--primary-color);
-  }
-
-  .detail-item.bio-item {
-    margin-top: 0.5rem;
-  }
-
-  .detail-label {
-    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
     color: var(--primary-color);
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
   }
 
-  .detail-value {
-    color: #555;
-    font-size: 1rem;
+  .officer:hover .officer-arch::before,
+  .officer:focus-visible .officer-arch::before {
+    border-color: var(--primary-color);
+    inset: -11px;
+  }
+
+  .officer:hover .officer-arch .officer-photo {
+    filter: saturate(1.15) brightness(1.04);
+  }
+
+  .officer:focus-visible {
+    outline: none;
+  }
+
+  .officer:focus-visible .officer-name {
+    text-decoration: underline;
+    text-decoration-color: var(--primary-color);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
+  }
+
+  .officer-name {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    line-height: 1.25;
+    color: var(--text-color);
+  }
+
+  .officer-position {
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
+    color: var(--primary-color);
+  }
+
+  /* Officer bio dialog */
+  .officer-dialog {
+    margin: auto;
+    width: min(760px, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 2.5rem;
+    border: none;
+    border-radius: 18px;
+    background: white;
+    color: var(--text-color);
+    box-shadow: 0 30px 60px -20px rgba(74, 35, 96, 0.5);
+  }
+
+  .officer-dialog::backdrop {
+    background: rgba(45, 20, 60, 0.55);
+    backdrop-filter: blur(3px);
+  }
+
+  .officer-dialog[open] {
+    animation: dialog-in 0.22s ease-out;
+  }
+
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+
+  .dialog-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .dialog-arch {
+    margin: 7px;
+    width: calc(100% - 14px);
+  }
+
+  .dialog-name {
+    font-size: 1.9rem;
+    margin-right: 2.5rem;
+  }
+
+  .dialog-position {
+    color: var(--primary-color);
+    font-size: 1.05rem;
+    margin-top: 0.25rem;
+  }
+
+  .dialog-facts {
+    display: grid;
+    gap: 0.6rem;
+    margin: 1.5rem 0;
+    padding: 1rem 0;
+    border-top: 1px solid #E6DCEC;
+    border-bottom: 1px solid #E6DCEC;
+  }
+
+  .dialog-facts div {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 1rem;
+  }
+
+  .dialog-facts dt {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--plum);
+  }
+
+  .dialog-facts dd {
+    font-size: 0.95rem;
     line-height: 1.5;
   }
 
-  .detail-item.bio-item .detail-value {
-    font-size: 0.95rem;
-    line-height: 1.6;
+  .dialog-bio :global(p) {
+    font-size: 1.02rem;
+    line-height: 1.7;
+    max-width: 62ch;
   }
 
-  /* Responsive Design */
+  .dialog-bio :global(p + p) {
+    margin-top: 0.85rem;
+  }
+
+  /* Sticky so the close button stays reachable while a long bio scrolls */
+  .dialog-close-form {
+    position: sticky;
+    top: 0;
+    height: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .dialog-close {
+    margin: -1.25rem -1.25rem 0 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--lavender-wash);
+    color: var(--plum);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .dialog-close:hover,
+  .dialog-close:focus-visible {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  .dialog-close:focus-visible {
+    outline: 3px solid var(--secondary-color);
+    outline-offset: 2px;
+  }
+
+  /* Past Officers Section */
+  .history-section {
+    background: white;
+    padding: 4rem 0 5rem;
+  }
+
+  .history-intro {
+    text-align: center;
+    color: #555;
+    margin: 1.75rem 0 2.5rem;
+  }
+
+  .history-terms {
+    max-width: 1000px;
+    margin: 0 auto;
+    border-top: 1px solid #E6DCEC;
+  }
+
+  .term {
+    border-bottom: 1px solid #E6DCEC;
+  }
+
+  .term-summary {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1.25rem 0.5rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .term-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .term-summary:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  .term-year {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--text-color);
+  }
+
+  .term-count {
+    color: #777;
+    font-size: 0.95rem;
+  }
+
+  .term-chevron {
+    margin-left: auto;
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    transform: translateY(-4px) rotate(45deg);
+    transition: transform 0.2s ease;
+    align-self: center;
+  }
+
+  .term[open] .term-chevron {
+    transform: translateY(2px) rotate(225deg);
+  }
+
+  .term-body {
+    padding: 0.5rem 0.5rem 2.5rem;
+  }
+
+  .term-group-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin-bottom: 2.5rem;
+  }
+
+  .term-roster {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 2rem 1.5rem;
+  }
+
+  .term-officer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .term-arch {
+    max-width: 110px;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #E0CFA0;
+  }
+
+  .term-name {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+
+  .term-position {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+  }
+
   @media (max-width: 768px) {
-    .group-photo-container {
-      margin-bottom: 2rem;
-    }
-
-    .group-photo {
-      border-radius: 12px;
-    }
-
-    .hover-indicator {
-      margin: 1.5rem 0 0.5rem;
-    }
-
-    .hover-text {
-      font-size: 0.8rem;
-    }
-
-    .hover-arrow {
-      font-size: 1rem;
-    }
-
     .officers-grid {
+      gap: 2.5rem 1.25rem;
+    }
+
+    .officers-grid > li {
+      flex-basis: calc(50% - 0.625rem);
+    }
+
+    .officer-name {
+      font-size: 1.05rem;
+    }
+
+    .officer-position {
+      font-size: 0.85rem;
+    }
+
+    .officer-dialog {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .dialog-layout {
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
 
-    .mission-text p {
-      text-align: left;
+    .dialog-arch {
+      max-width: 180px;
+      justify-self: center;
     }
 
-    .avatar-container {
-      width: 100px;
-      height: 100px;
-    }
-
-    .avatar-placeholder {
-      width: 100%;
-      height: 100%;
-    }
-
-    .avatar-emoji {
-      font-size: 2.5rem;
-    }
-
-    .officer-basic-info {
-      font-size: 0.8rem;
-      gap: 0.25rem;
-    }
-
-    .officer-hover-overlay {
-      padding: 1.5rem;
-      max-width: 90vw;
-    }
-
-    .hover-content h4 {
+    .dialog-name {
       font-size: 1.5rem;
-    }
-
-    .detail-item {
-      padding: 0.5rem;
-    }
-
-    .detail-label {
-      font-size: 0.9rem;
-    }
-
-    .detail-value {
-      font-size: 0.9rem;
-    }
-
-    .detail-item.bio-item .detail-value {
-      font-size: 0.85rem;
     }
   }
 
   @media (max-width: 480px) {
-    .group-photo-container {
-      margin-bottom: 1.5rem;
-    }
-
-    .hover-indicator {
-      margin: 1rem 0 0.5rem;
-      gap: 0.25rem;
-    }
-
-    .hover-text {
-      font-size: 0.75rem;
-    }
-
-    .hover-arrow {
-      font-size: 0.9rem;
-    }
-
     .page-header {
       padding: 3rem 0 2rem;
     }
 
     .mission-section,
-    .officers-section {
+    .officers-section,
+    .history-section {
       padding: 3rem 0;
-    }
-
-    .officer-card {
-      padding: 1.5rem;
-    }
-
-    .officer-name {
-      font-size: 1.3rem;
     }
 
     .section-title {
       font-size: 2rem;
     }
 
-    .officer-basic-info {
-      font-size: 0.75rem;
-      margin-bottom: 0.75rem;
+    .officers-grid {
+      gap: 2rem 1rem;
     }
 
-    .officer-hover-overlay {
-      padding: 1rem;
-      max-width: 95vw;
+    .term-roster {
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    .hover-content h4 {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
+    .term-year {
+      font-size: 1.35rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .officer-dialog[open] {
+      animation: none;
     }
 
-    .detail-item {
-      padding: 0.5rem;
-    }
-
-    .detail-label {
-      font-size: 0.8rem;
-    }
-
-    .detail-value {
-      font-size: 0.85rem;
-    }
-
-    .detail-item.bio-item .detail-value {
-      font-size: 0.8rem;
+    .officer-arch::before,
+    .officer-arch .officer-photo,
+    .term-chevron {
+      transition: none;
     }
   }
 
@@ -801,14 +911,6 @@ async function getOfficerImage(name: string) {
     padding: 4rem 0;
   }
 
-  .photos-subtitle {
-    font-size: clamp(1.1rem, 2vw, 1.3rem);
-    font-family: 'Raleway', sans-serif;
-    opacity: 0.9;
-    text-align: center;
-    margin-bottom: 3rem;
-    color: #666;
-  }
 
   /* Gallery Section */
   .gallery-controls {
@@ -948,32 +1050,8 @@ async function getOfficerImage(name: string) {
     box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.3);
   }
 
-  /* Gallery Info */
-  .gallery-info {
-    margin-top: 4rem;
-    text-align: center;
-  }
 
-  .info-box {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 0 auto;
-  }
 
-  .info-title {
-    font-size: 1.5rem;
-    color: var(--text-color);
-    margin-bottom: 1rem;
-  }
-
-  .info-text {
-    color: #666;
-    line-height: 1.6;
-    font-size: 1rem;
-  }
 
   /* Responsive Design */
   @media (max-width: 768px) {
@@ -1076,6 +1154,7 @@ async function getOfficerImage(name: string) {
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
+      if (document.querySelector('.officer-dialog[open]')) return;
       if (e.key === 'ArrowLeft') {
         const newIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
         updateMainImage(newIndex);
@@ -1085,98 +1164,25 @@ async function getOfficerImage(name: string) {
       }
     });
 
-    // Officer card hover/touch functionality
-    const officerCards = document.querySelectorAll('.officer-card');
-    let activePopup = null;
-    let activeCard = null;
+    // Officer bio dialogs
+    document.querySelectorAll('.officer').forEach(button => {
+      const dialog = document.getElementById(button.dataset.dialog);
+      button.addEventListener('click', () => dialog.showModal());
 
-    // Detect if device supports touch
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-    function closePopup() {
-      if (activePopup) {
-        activePopup.classList.remove('show');
-        activePopup = null;
-      }
-      if (activeCard) {
-        activeCard.style.zIndex = '';
-        activeCard = null;
-      }
-    }
-
-    function showPopup(card, popup) {
-      // Hide any existing popup
-      closePopup();
-
-      // Show new popup and elevate card z-index
-      popup.classList.add('show');
-      card.style.zIndex = '10001'; // Higher than popup's 10000
-      activePopup = popup;
-      activeCard = card;
-    }
-
-    // Handle clicks outside popup to close it
-    function handleOutsideClick(e) {
-      if (activePopup && !activePopup.contains(e.target) && !activeCard.contains(e.target)) {
-        closePopup();
-      }
-    }
-
-    // Add outside click listener for mobile
-    document.addEventListener('click', handleOutsideClick);
-
-    officerCards.forEach(card => {
-      const popup = card.querySelector('.officer-hover-overlay');
-      const closeBtn = popup.querySelector('.popup-close-btn');
-
-      if (isTouchDevice) {
-        // Mobile/Touch devices: Use click/tap to show popup
-        card.addEventListener('click', (e) => {
-          e.stopPropagation(); // Prevent outside click handler
-          if (activePopup === popup) {
-            // If clicking the same card that's already active, close it
-            closePopup();
-          } else {
-            showPopup(card, popup);
-          }
-        });
-
-        // Show close button for mobile
-        closeBtn.style.display = 'flex';
-
-        // Handle close button click
-        closeBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          closePopup();
-        });
-
-        // Handle touch events for better mobile experience
-        card.addEventListener('touchstart', (e) => {
-          e.stopPropagation();
-        });
-
-      } else {
-        // Desktop: Use hover to show popup
-        card.addEventListener('mouseenter', () => {
-          showPopup(card, popup);
-        });
-
-        // Handle mouse leaving the card (but not the popup)
-        card.addEventListener('mouseleave', (e) => {
-          // Only hide if we're not moving to the popup
-          if (!popup.contains(e.relatedTarget)) {
-            closePopup();
-          }
-        });
-
-        // Handle mouse leaving the popup
-        popup.addEventListener('mouseleave', () => {
-          closePopup();
-        });
-
-        // Hide close button (not needed for hover)
-        closeBtn.style.display = 'none';
-      }
+      // Clicking the backdrop closes it; require press and release both outside
+      // the box so dragging a text selection out of the bio doesn't close it
+      const isOutside = (e) => {
+        const rect = dialog.getBoundingClientRect();
+        return e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom;
+      };
+      let pressedOutside = false;
+      dialog.addEventListener('pointerdown', (e) => {
+        pressedOutside = e.target === dialog && isOutside(e);
+      });
+      dialog.addEventListener('click', (e) => {
+        if (pressedOutside && e.target === dialog && isOutside(e)) dialog.close();
+        pressedOutside = false;
+      });
     });
   });
 </script>
