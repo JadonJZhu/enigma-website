@@ -316,7 +316,6 @@ function bioToHTML(bio: string) {
         <section class="history-section" aria-labelledby="history-title">
           <div class="container">
             <h2 class="section-title" id="history-title">Past Officers</h2>
-            <p class="history-intro">The people who kept Enigma running in years past.</p>
 
             <div class="history-terms">
               {pastTerms.map((past) => (
@@ -723,15 +722,10 @@ function bioToHTML(bio: string) {
     padding: 4rem 0 5rem;
   }
 
-  .history-intro {
-    text-align: center;
-    color: #555;
-    margin: 1.75rem 0 2.5rem;
-  }
 
   .history-terms {
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 2.75rem auto 0;
     border-top: 1px solid #E6DCEC;
   }
 
